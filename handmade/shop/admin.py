@@ -1,3 +1,13 @@
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+
+admin.site.register(Category)
+admin.site.register(User)
+admin.site.register(Salesman)
+admin.site.register(Recommendations)
+admin.site.register(Links)
+admin.site.register(Product)
+admin.site.register(ProductPhoto)
+admin.site.register(SalesmanScore)
+admin.site.register(ProductScore)
