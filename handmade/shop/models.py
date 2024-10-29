@@ -25,12 +25,17 @@ class Salesman(models.Model):
     likes = models.ManyToManyField(User, related_name='likes')
     description = models.TextField()
     categories = models.ManyToManyField(Category, related_name='categories')
+    moderate = models.BooleanField(default=False)
 
 
 class Recommendations(models.Model):
-    salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
-    # recommendation_id – это id из таблицы Salesman
-    recommendation_id = models.IntegerField()
+    salesman = models.ForeignKey(Salesman,
+                                 on_delete=models.CASCADE,
+                                 related_name='salesman')
+    recommendation = models.OneToOneField(Salesman,
+                                          on_delete=models.CASCADE,
+                                          related_name='recommendation',
+                                          null=True)
 
 
 class Links(models.Model):
@@ -46,11 +51,13 @@ class Product(models.Model):
     likes = models.ManyToManyField(User, related_name='like')
     select = models.ManyToManyField(User, related_name='select')
     category = models.ManyToManyField(Category)
+    moderate = models.BooleanField(default=False)
 
 
 class ProductPhoto(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     photo = models.ImageField()
+    moderate = models.BooleanField(default=False)
 
 
 class SalesmanScore(models.Model):
@@ -63,3 +70,12 @@ class ProductScore(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField()
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    text = models.TextField()
+    is_moderate = models.BooleanField(default=False)
+    date = models.DateTimeField(auto_now_add=True)
