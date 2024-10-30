@@ -2,11 +2,21 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 
+def category_choice():
+    res = {}
+    id_list = Category.objects.values('id')
+    for id_dict in id_list:
+        res[id_dict['id']] = Category.objects.get(id=id_dict['id']).name
+    return res
+
+
 class Category(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
-    # block_categories – это id обобщающей категории, 0 если её нет
-    block_categories = models.IntegerField()
+    parent_category_id = models.PositiveSmallIntegerField(choices=category_choice, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class User(models.Model):
