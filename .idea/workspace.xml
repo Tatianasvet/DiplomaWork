@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="main menu" />
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="main menu">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/cart.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/checkout.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/checkout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/contact.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/products.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -117,7 +124,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730742890643</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="main menu">
+      <option name="closed" value="true" />
+      <created>1730742988862</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1730742988862</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
