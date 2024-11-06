@@ -35,8 +35,20 @@ def products_page(request):
 
 
 def salesmans_page(request):
-    return render(request, 'salesmans.html')
+    return render(request, 'dummy.html')
 
 
 def about_page(request):
     return render(request, 'about.html')
+
+
+def faq_page(request):
+    return render(request, 'dummy.html')
+
+
+def conditions_page(request):
+    return render(request, 'dummy.html')
+
+
+def payment_page(request):
+    return render(request, 'dummy.html')

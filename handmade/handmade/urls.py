@@ -20,12 +20,15 @@ from shop.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', start_page),
-    path('cart/', cart_page),
-    path('contact/', contact_page),
-    path('reviews/', reviews_page),
-    path('login/', checkout_page),
-    path('products/', products_page),
-    path('salesmans/', salesmans_page),
-    path('about/', about_page)
+    path('', start_page, name='home'),
+    path('cart/', cart_page, name='cart'),
+    path('contact/', contact_page, name='contact'),
+    path('reviews/', reviews_page, name='reviews'),
+    path('login/', checkout_page, name='login'),
+    path('products/', products_page, name='products'),
+    path('salesmans/', salesmans_page, name='salesmans'),
+    path('about/', about_page, name='about'),
+    path('faq/', faq_page, name='faq'),
+    path('conditions/', conditions_page, name='conditions'),
+    path('payment/', payment_page, name='payment')
 ]
