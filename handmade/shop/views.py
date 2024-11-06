@@ -27,7 +27,11 @@ def checkout_page(request):
 
 
 def products_page(request):
-    return render(request, 'products.html')
+    products = Product.objects.all()
+    photos = ProductPhoto.objects.all()
+    context = {'products': products,
+               'photos': photos}
+    return render(request, 'products.html', context)
 
 
 def salesmans_page(request):

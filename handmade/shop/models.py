@@ -37,6 +37,9 @@ class Salesman(models.Model):
     categories = models.ManyToManyField(Category, related_name='categories')
     moderate = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
 
 class Recommendations(models.Model):
     salesman = models.ForeignKey(Salesman,
@@ -58,16 +61,24 @@ class Product(models.Model):
     salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     description = models.TextField()
-    likes = models.ManyToManyField(User, related_name='like')
-    select = models.ManyToManyField(User, related_name='select')
     category = models.ManyToManyField(Category)
+    price = models.PositiveIntegerField(default=1)
+    likes = models.ManyToManyField(User, related_name='like', null=True, blank=True)
+    select = models.ManyToManyField(User, related_name='select', null=True, blank=True)
     moderate = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
 
 class ProductPhoto(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    photo = models.ImageField()
+    photo = models.ImageField(upload_to="static/product_photo")
+    number = models.PositiveSmallIntegerField(default=1)
     moderate = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.product.name}_photo_{self.number}'
 
 
 class SalesmanScore(models.Model):
