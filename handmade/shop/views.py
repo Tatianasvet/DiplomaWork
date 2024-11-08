@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from .forms import SignUpForm, LoginForm
 from .models import *
 
 
@@ -6,8 +8,41 @@ def start_page(request):
     return render(request, 'index.html')
 
 
+def signup_page(request):
+    context = {}
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            context['error_message'] = form.error_messages
+    return render(request, 'signup.html', context)
+
+
 def login_page(request):
-    return render(request, 'login.html')
+    form = LoginForm(data=request.POST or None)
+    context = {}
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                context['error_message'] = 'Неверный логин или пароль'
+        else:
+            context['error_message'] = form.error_messages
+    return render(request, 'login.html', context)
+
+
+def logout(request):
+    if request.user:
+        logout(request)
+    return render(request, 'home')
 
 
 def cart_page(request):

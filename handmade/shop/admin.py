@@ -3,7 +3,6 @@ from .models import *
 
 
 admin.site.register(Category)
-admin.site.register(User)
 admin.site.register(Salesman)
 admin.site.register(Recommendations)
 admin.site.register(Links)

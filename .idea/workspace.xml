@@ -4,20 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="product page">
-      <change afterPath="$PROJECT_DIR$/handmade/templates/dummy.html" afterDir="false" />
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="footer area">
+      <change afterPath="$PROJECT_DIR$/handmade/shop/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/templates/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/templates/signup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/handmade/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/handmade/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/handmade/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/wsgi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/migrations/0002_remove_recommendations_recommendation_id_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/migrations/0003_product_moderate_productphoto_moderate_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/migrations/0004_remove_category_block_categories_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/migrations/0005_productphoto_number_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/migrations/0006_product_price.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/about.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/cart.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/checkout.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/checkout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/contact.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/products.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/reviews.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/reviews.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/salesmans.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/salesmans.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +33,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -163,7 +169,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730901238218</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="footer area">
+      <option name="closed" value="true" />
+      <created>1730922223447</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1730922223447</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -187,6 +201,7 @@
     <MESSAGE value="Product page" />
     <MESSAGE value="About page" />
     <MESSAGE value="product page" />
-    <option name="LAST_COMMIT_MESSAGE" value="product page" />
+    <MESSAGE value="footer area" />
+    <option name="LAST_COMMIT_MESSAGE" value="footer area" />
   </component>
 </project>

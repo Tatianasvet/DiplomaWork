@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -17,13 +18,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class User(models.Model):
-    user_name = models.CharField(max_length=50)
-    email = models.EmailField()
-    password_hash = models.TextField()
-    favourites_category = models.ManyToManyField(Category, related_name='favourites', null=True, blank=True)
 
 
 class Salesman(models.Model):
