@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from .forms import SignUpForm, LoginForm
 from .models import *
 
 
 def start_page(request):
-    return render(request, 'index.html')
+    context = {'user': request.user}
+    return render(request, 'index.html', context)
 
 
 def signup_page(request):
@@ -39,10 +40,10 @@ def login_page(request):
     return render(request, 'login.html', context)
 
 
-def logout(request):
-    if request.user:
-        logout(request)
-    return render(request, 'home')
+def do_logout(request):
+    logout(request)
+    context = {'user': request.user}
+    return render(request, 'index.html', context)
 
 
 def cart_page(request):

@@ -84,7 +84,11 @@
 						<div class="right-content">
 							<ul class="list-main">
 								<li><a href={% url 'cart' %}>Мой Аккаунт</a></li>
+								{% if user.is_active %}
+								<li><i class="ti-user"></i><a href={% url 'logout' %}>Выход</a></li>
+								{% else %}
 								<li><i class="ti-user"></i><a href={% url 'login' %}>Вход</a></li>
+								{% endif %}
 								<li><i class="ti-power-off"></i><a href={% url 'signup' %}>Регистрация</a></li>
 							</ul>
 						</div>
