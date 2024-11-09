@@ -70,8 +70,33 @@ def products_page(request):
     return render(request, 'products.html', context)
 
 
+def product_info(request):
+    product_id = request.GET.get('product_id')
+    product = Product.objects.get(id=product_id)
+    photos = ProductPhoto.objects.filter(product=product)
+    context = {'salesman': product.salesman,
+               'product': product,
+               'photos': photos}
+    return render(request, 'product_info.html', context)
+
+
 def salesmans_page(request):
-    return render(request, 'dummy.html')
+    salesmans = Salesman.objects.all().order_by('name')
+    context = {'salesmans': salesmans}
+    return render(request, 'salesmans.html', context)
+
+
+def salesman_info_page(request):
+    salesman_id = request.GET.get('salesman_id')
+    salesman = Salesman.objects.get(id=salesman_id)
+    products = Product.objects.filter(salesman=salesman).order_by('name')
+    photos = []
+    for product in products:
+        photos.append(ProductPhoto.objects.get(product=product, number=1))
+    context = {'salesman': salesman,
+               'products': products,
+               'photos': photos}
+    return render(request, 'salesman_info.html', context)
 
 
 def about_page(request):

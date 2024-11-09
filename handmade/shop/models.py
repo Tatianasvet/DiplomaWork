@@ -24,12 +24,13 @@ class Salesman(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField()
     phone = PhoneNumberField()
-    photo = models.ImageField(null=True, blank=True)
-    logo_image = models.ImageField(null=True, blank=True)
+    photo = models.ImageField(upload_to="static/salesmans_photo", null=True, blank=True)        # сделать обязательным
+    logo_image = models.ImageField(upload_to="static/salesmans_photo", null=True, blank=True)   # убрать
     likes = models.ManyToManyField(User, related_name='likes', null=True, blank=True)
     description = models.TextField()
     categories = models.ManyToManyField(Category, related_name='categories')
     moderate = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.name
