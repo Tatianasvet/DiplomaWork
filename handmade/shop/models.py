@@ -24,13 +24,12 @@ class Salesman(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField()
     phone = PhoneNumberField()
-    photo = models.ImageField(upload_to="static/salesmans_photo", null=True, blank=True)        # сделать обязательным
-    logo_image = models.ImageField(upload_to="static/salesmans_photo", null=True, blank=True)   # убрать
+    photo = models.ImageField(upload_to="static/salesmans_photo")
     likes = models.ManyToManyField(User, related_name='likes', null=True, blank=True)
     description = models.TextField()
     categories = models.ManyToManyField(Category, related_name='categories')
+    signup_date = models.DateTimeField(auto_now_add=True)
     moderate = models.BooleanField(default=False)
-
 
     def __str__(self):
         return self.name
@@ -56,10 +55,11 @@ class Product(models.Model):
     salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.ManyToManyField(Category)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     price = models.PositiveIntegerField(default=1)
     likes = models.ManyToManyField(User, related_name='like', null=True, blank=True)
     select = models.ManyToManyField(User, related_name='select', null=True, blank=True)
+    add_date = models.DateTimeField(auto_now_add=True)
     moderate = models.BooleanField(default=False)
 
     def __str__(self):
@@ -93,5 +93,5 @@ class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     text = models.TextField()
-    is_moderate = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
+    is_moderate = models.BooleanField(default=False)

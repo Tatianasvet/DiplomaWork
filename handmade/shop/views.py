@@ -5,8 +5,22 @@ from .models import *
 
 
 def start_page(request):
-    context = {'user': request.user}
+    categories = Category.objects.all()
+    parent_categories_id = _get_parent_categories_id(categories)
+    context = {'user': request.user,
+               'categories': categories,
+               'parent_categories_id': parent_categories_id}
     return render(request, 'index.html', context)
+
+
+def _get_parent_categories_id(categories):
+    parent_categories_id = []
+    for check_category in categories:
+        for category in categories:
+            if check_category.id == category.parent_category_id:
+                parent_categories_id.append(check_category.id)
+                break
+    return parent_categories_id
 
 
 def signup_page(request):
@@ -63,17 +77,71 @@ def checkout_page(request):
 
 
 def products_page(request):
-    products = Product.objects.all()
-    photos = ProductPhoto.objects.all()
-    context = {'products': products,
+    category_id = request.GET.get('category_id')
+    category_name = None
+    way = None
+    sub_categories = None
+    parent_categories_id = None
+    if category_id:
+        way = _category_way(category_id)
+        parent_category = Category.objects.get(id=category_id)
+        category_name = parent_category.name
+        sub_categories = _sub_categories_list(parent_category, [])
+        parent_categories_id = _get_parent_categories_id(sub_categories)
+        products = _get_products_by_categories_list(sub_categories)
+    else:
+        products = Product.objects.all().order_by('-add_date')
+    photos = ProductPhoto.objects.filter(number=1)
+    categories = Category.objects.all()
+    context = {'category_id': category_id,
+               'category_name': category_name,
+               'way': way,
+               'categories': categories,
+               'sub_categories': sub_categories,
+               'parent_categories_id': parent_categories_id,
+               'products': products,
                'photos': photos}
     return render(request, 'products.html', context)
+
+
+def _sub_categories_list(parent_category, category_list):
+    category_list.append(parent_category)
+    for sub_category in Category.objects.all():
+        if sub_category.parent_category_id == parent_category.id:
+            category_list = _sub_categories_list(sub_category, category_list)
+    return category_list
+
+
+def _get_products_by_categories_list(categories_list):
+    result = []
+    for category in categories_list:
+        products = Product.objects.filter(category=category)
+        for product in products:
+            result.append(product)
+    return result
+
+
+def _category_way(category_id):
+    category = Category.objects.get(id=category_id)
+    way = [category,]
+    while category.parent_category_id:
+        category = Category.objects.get(id=category.parent_category_id)
+        way.append(category)
+    way.reverse()
+    return way
+
+
+def _get_product_photos(product_list):
+    result = []
+    for product in product_list:
+        result.append(ProductPhoto.objects.get(product=product, number=1))
+    return result
 
 
 def product_info(request):
     product_id = request.GET.get('product_id')
     product = Product.objects.get(id=product_id)
-    photos = ProductPhoto.objects.filter(product=product)
+    photos = ProductPhoto.objects.filter(product=product).order_by('number')
     context = {'salesman': product.salesman,
                'product': product,
                'photos': photos}
@@ -89,7 +157,7 @@ def salesmans_page(request):
 def salesman_info_page(request):
     salesman_id = request.GET.get('salesman_id')
     salesman = Salesman.objects.get(id=salesman_id)
-    products = Product.objects.filter(salesman=salesman).order_by('name')
+    products = Product.objects.filter(salesman=salesman).order_by('-add_date')
     photos = []
     for product in products:
         photos.append(ProductPhoto.objects.get(product=product, number=1))

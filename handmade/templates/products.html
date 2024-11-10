@@ -2,8 +2,65 @@
 
 {% load static %}
 
-{% block category %}
-{% endblock %}
+{% if category_id %}
+    {% block category %}
+        <div class="col-lg-3">
+            <div class="all-category">
+                <h3 class="cat-heading">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                    {% if category_name %}
+                        {{ category_name }}
+                    {% else %}
+                        КАТЕГОРИИ
+                    {% endif %}
+                </h3>
+                <ul class="main-category">
+                    {% for category in sub_categories %}
+                        {% if category.parent_category_id == category_id %}
+                            <li>
+                                <a href="{% url 'products' %}?category_id={{ category.id }}">
+                                    {{ category.name }}
+                                    {% for parent_id in parent_categories_id %}
+                                        {% if category.id == parent_id %}
+                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </a>
+                                <ul class="sub-category">
+                                    {% for sub_category in categories %}
+                                        {% if sub_category.parent_category_id == category.id %}
+                                            <li>
+                                                <a href="{% url 'products' %}?category_id={{ sub_category.id }}">
+                                                    {{ sub_category.name }}
+                                                    {% for sub_parent_id in parent_categories_id %}
+                                                        {% if sub_category.id == sub_parent_id %}
+                                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </a>
+                                                <ul class="sub-sub-category">
+                                                    {% for sub_sub_category in categories %}
+                                                        {% if sub_sub_category.parent_category_id == sub_category.id %}
+                                                            <li>
+                                                                <a href="{% url 'products' %}?category_id={{ sub_sub_category.id }}">
+                                                                    {{ sub_sub_category.name }}
+                                                                </a>
+                                                            </li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endblock %}
+{% endif %}
 
 {% block menu_home_button %}
 <li><a href={% url 'home' %}>Главная</a></li>
@@ -11,11 +68,36 @@
 
 {% block menu_product_button %}
 <li class="active">
-    <a href="#">Товары</a>
+    <a href={% url 'products' %}>Товары</a>
 </li>
 {% endblock %}
 
 {% block content %}
+<!-- Breadcrumbs -->
+{% if category_id %}
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div class="bread-inner">
+					<ul class="bread-list">
+						<li><a href="{% url 'products' %}">Все категории</a></li>
+                        {% for category in way %}
+                            <li>
+                                <i class="ti-arrow-right"></i>
+                                <a href="{% url 'products' %}?category_id={{ category.id }}">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
+<!-- End Breadcrumbs -->
 <!-- Start Product Area -->
 <div class="product-area section">
         <div class="container">
