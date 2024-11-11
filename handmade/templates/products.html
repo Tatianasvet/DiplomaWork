@@ -2,65 +2,63 @@
 
 {% load static %}
 
-{% if category_id %}
-    {% block category %}
-        <div class="col-lg-3">
-            <div class="all-category">
-                <h3 class="cat-heading">
-                    <i class="fa fa-bars" aria-hidden="true"></i>
-                    {% if category_name %}
-                        {{ category_name }}
-                    {% else %}
-                        КАТЕГОРИИ
+{% block CATEGORY %}
+    <div class="col-lg-3">
+        <div class="all-category">
+            <h3 class="cat-heading">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+                {% if category %}
+                    {{ category.name }}
+                {% else %}
+                    КАТЕГОРИИ
+                {% endif %}
+            </h3>
+            <ul class="main-category">
+                {% for iter_category in categories %}
+                    {% if iter_category.parent_category_id == category.id %}
+                        <li>
+                            <a href="{% url 'products' %}?category_id={{ iter_category.id }}">
+                                {{ iter_category.name }}
+                                {% for parent_id in parent_categories_id %}
+                                    {% if iter_category.id == parent_id %}
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </a>
+                            <ul class="sub-category">
+                                {% for sub_category in categories %}
+                                    {% if sub_category.parent_category_id == iter_category.id %}
+                                        <li>
+                                            <a href="{% url 'products' %}?category_id={{ sub_category.id }}">
+                                                {{ sub_category.name }}
+                                                {% for sub_parent_id in parent_categories_id %}
+                                                    {% if sub_category.id == sub_parent_id %}
+                                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </a>
+                                            <ul class="sub-sub-category">
+                                                {% for sub_sub_category in categories %}
+                                                    {% if sub_sub_category.parent_category_id == sub_category.id %}
+                                                        <li>
+                                                            <a href="{% url 'products' %}?category_id={{ sub_sub_category.id }}">
+                                                                {{ sub_sub_category.name }}
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
                     {% endif %}
-                </h3>
-                <ul class="main-category">
-                    {% for category in sub_categories %}
-                        {% if category.parent_category_id == category_id %}
-                            <li>
-                                <a href="{% url 'products' %}?category_id={{ category.id }}">
-                                    {{ category.name }}
-                                    {% for parent_id in parent_categories_id %}
-                                        {% if category.id == parent_id %}
-                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                        {% endif %}
-                                    {% endfor %}
-                                </a>
-                                <ul class="sub-category">
-                                    {% for sub_category in categories %}
-                                        {% if sub_category.parent_category_id == category.id %}
-                                            <li>
-                                                <a href="{% url 'products' %}?category_id={{ sub_category.id }}">
-                                                    {{ sub_category.name }}
-                                                    {% for sub_parent_id in parent_categories_id %}
-                                                        {% if sub_category.id == sub_parent_id %}
-                                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </a>
-                                                <ul class="sub-sub-category">
-                                                    {% for sub_sub_category in categories %}
-                                                        {% if sub_sub_category.parent_category_id == sub_category.id %}
-                                                            <li>
-                                                                <a href="{% url 'products' %}?category_id={{ sub_sub_category.id }}">
-                                                                    {{ sub_sub_category.name }}
-                                                                </a>
-                                                            </li>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </ul>
-                                            </li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
+                {% endfor %}
+            </ul>
         </div>
-    {% endblock %}
-{% endif %}
+    </div>
+{% endblock %}
 
 {% block menu_home_button %}
 <li><a href={% url 'home' %}>Главная</a></li>
@@ -74,7 +72,7 @@
 
 {% block content %}
 <!-- Breadcrumbs -->
-{% if category_id %}
+{% if category %}
 <div class="breadcrumbs">
 	<div class="container">
 		<div class="row">
@@ -82,11 +80,11 @@
 				<div class="bread-inner">
 					<ul class="bread-list">
 						<li><a href="{% url 'products' %}">Все категории</a></li>
-                        {% for category in way %}
+                        {% for iter_category in way %}
                             <li>
                                 <i class="ti-arrow-right"></i>
-                                <a href="{% url 'products' %}?category_id={{ category.id }}">
-                                    {{ category.name }}
+                                <a href="{% url 'products' %}?category_id={{ iter_category.id }}">
+                                    {{ iter_category.name }}
                                 </a>
                             </li>
                         {% endfor %}

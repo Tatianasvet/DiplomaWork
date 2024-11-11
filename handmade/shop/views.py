@@ -6,10 +6,9 @@ from .models import *
 
 def start_page(request):
     categories = Category.objects.all()
-    parent_categories_id = _get_parent_categories_id(categories)
     context = {'user': request.user,
                'categories': categories,
-               'parent_categories_id': parent_categories_id}
+               'parent_categories_id': _get_parent_categories_id(categories)}
     return render(request, 'index.html', context)
 
 
@@ -78,29 +77,19 @@ def checkout_page(request):
 
 def products_page(request):
     category_id = request.GET.get('category_id')
-    category_name = None
-    way = None
-    sub_categories = None
-    parent_categories_id = None
+    context = {}
     if category_id:
-        way = _category_way(category_id)
-        parent_category = Category.objects.get(id=category_id)
-        category_name = parent_category.name
-        sub_categories = _sub_categories_list(parent_category, [])
-        parent_categories_id = _get_parent_categories_id(sub_categories)
-        products = _get_products_by_categories_list(sub_categories)
+        context['category'] = category = Category.objects.get(id=category_id)
+        context['way'] = _category_way(category_id)
+        context['categories'] = categories = _sub_categories_list(category, [])
+        context['parent_categories_id'] = _get_parent_categories_id(categories)
+        context['products'] = _get_products_by_categories_list(categories)
     else:
-        products = Product.objects.all().order_by('-add_date')
-    photos = ProductPhoto.objects.filter(number=1)
-    categories = Category.objects.all()
-    context = {'category_id': category_id,
-               'category_name': category_name,
-               'way': way,
-               'categories': categories,
-               'sub_categories': sub_categories,
-               'parent_categories_id': parent_categories_id,
-               'products': products,
-               'photos': photos}
+        context['category'] = False
+        context['products'] = Product.objects.all().order_by('-add_date')
+        context['categories'] = categories = Category.objects.all()
+        context['parent_categories_id'] = _get_parent_categories_id(categories)
+    context['photos'] = ProductPhoto.objects.filter(number=1)
     return render(request, 'products.html', context)
 
 
