@@ -27,15 +27,15 @@ def signup_page(request):
     if request.method == 'POST':
         if request.GET.get('salesman') == 'true':
             user_form = SignUpForm(request.POST)
-            salesman_form = SalesmanSignUpForm(request.POST)
+            salesman_form = SalesmanSignUpForm(request.POST, request.FILES)
             if user_form.is_valid():
                 if salesman_form.is_valid():
                     user = user_form.save()
                     login(request, user)
                     Salesman.objects.create(user=user,
-                                            phone=salesman_form.phone,
-                                            photo=salesman_form.photo,
-                                            description=salesman_form.description)
+                                            phone=request.POST.get('phone'),
+                                            photo=request.FILES['photo'],
+                                            description=request.POST.get('description'))
                     return redirect('home')
                 else:
                     context['error_message'] = salesman_form.errors
