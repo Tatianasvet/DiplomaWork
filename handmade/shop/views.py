@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm
 from .models import *
 
 
@@ -25,13 +25,30 @@ def _get_parent_categories_id(categories):
 def signup_page(request):
     context = {}
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
+        if request.GET.get('salesman') == 'true':
+            user_form = SignUpForm(request.POST)
+            salesman_form = SalesmanSignUpForm(request.POST)
+            if user_form.is_valid():
+                if salesman_form.is_valid():
+                    user = user_form.save()
+                    login(request, user)
+                    Salesman.objects.create(user=user,
+                                            phone=salesman_form.phone,
+                                            photo=salesman_form.photo,
+                                            description=salesman_form.description)
+                    return redirect('home')
+                else:
+                    context['error_message'] = salesman_form.errors
+            else:
+                context['error_message'] = user_form.errors
         else:
-            context['error_message'] = form.error_messages
+            form = SignUpForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                login(request, user)
+                return redirect('home')
+            else:
+                context['error_message'] = 'Ошибка в заполнении формы'
     return render(request, 'signup.html', context)
 
 

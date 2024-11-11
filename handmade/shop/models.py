@@ -21,18 +21,17 @@ class Category(models.Model):
 
 
 class Salesman(models.Model):
-    name = models.CharField(max_length=200)
-    email = models.EmailField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = PhoneNumberField()
     photo = models.ImageField(upload_to="static/salesmans_photo")
     likes = models.ManyToManyField(User, related_name='likes', null=True, blank=True)
     description = models.TextField()
-    categories = models.ManyToManyField(Category, related_name='categories')
+    categories = models.ManyToManyField(Category, related_name='categories', null=True, blank=True)
     signup_date = models.DateTimeField(auto_now_add=True)
     moderate = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.user.username
 
 
 class Recommendations(models.Model):

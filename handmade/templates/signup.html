@@ -11,7 +11,7 @@
 
 {% block content %}
 <!-- Start Checkout -->
-<section class="shop checkout section">
+<section class="shop checkout product-area section">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8 col-12">
@@ -20,93 +20,156 @@
 					<p>Для регистрации заполните форму</p>
 				</div>
 			</div>
-			<div class="col-lg-6 col-12">
-				<div class="checkout-form">
-					<!-- Form -->
-					<form class="form" method="post">
-						{% csrf_token %}
-						<div class="row">
-							<div class="col-lg-12 col-md-12 col-12">
-								<div class="form-group">
-									<label>Имя пользователя<span>*</span></label>
-									<input type="text" id="username" name="username" placeholder="" required="required">
-								</div>
-							</div>
-							<div class="col-lg-12 col-md-12 col-12">
-								<div class="form-group">
-									<label>Email<span>*</span></label>
-									<input type="email" name="email" placeholder="" required="required">
-								</div>
-							</div>
-							<div class="col-lg-6 col-md-6 col-12">
-								<div class="form-group">
-									<label>Пароль<span>*</span></label>
-									<input type="password" name="password1" placeholder="" required="required">
-								</div>
-							</div>
-							<div class="col-lg-6 col-md-6 col-12">
-								<div class="form-group">
-									<label>Повторите пароль<span>*</span></label>
-									<input type="password" name="password2" placeholder="" required="required">
-								</div>
-							</div>
-						</div>
-						<div class="checkout-form">
-							<p style="color: red">{{ error_message }}</p>
-						</div>
-						<div class="col-lg-12 col-md-12 col-12">
-							<div class="single-widget get-button">
-								<div class="content">
-									<div class="button">
-										<button class="btn" type="submit">Зарегистрироваться</button>
+			<div class="row">
+                <div class="col-6">
+                    <div class="product-info">
+                        <div class="nav-main">
+                            <!-- Tab Nav -->
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#user" role="tab">Пользователь</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#salesman" role="tab">Мастер</a></li>
+                            </ul>
+                            <!--/ End Tab Nav -->
+                        </div>
+					</div>
+				</div>
+				<div class="col-12">
+					<div class="product-info">
+                        <div class="tab-content" id="myTabContent">
+							<!-- Start User Tab -->
+							<div class="tab-pane fade show active" id="user" role="tabpanel">
+								<div class="tab-single">
+									<div class="col-lg-6 col-12">
+										<div class="checkout-form">
+											<!-- User Form -->
+											<form class="form" method="post" action="{% url 'signup' %}?salesman=false">
+												{% csrf_token %}
+												<div class="row">
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="form-group">
+															<label>Имя пользователя<span>*</span></label>
+															<input type="text" name="username" placeholder="" required="required">
+														</div>
+													</div>
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="form-group">
+															<label>Email<span>*</span></label>
+															<input type="email" name="email" placeholder="" required="required">
+														</div>
+													</div>
+													<div class="col-lg-6 col-md-6 col-12">
+														<div class="form-group">
+															<label>Пароль<span>*</span></label>
+															<input type="password" name="password1" placeholder="" required="required">
+														</div>
+													</div>
+													<div class="col-lg-6 col-md-6 col-12">
+														<div class="form-group">
+															<label>Повторите пароль<span>*</span></label>
+															<input type="password" name="password2" placeholder="" required="required">
+														</div>
+													</div>
+												</div>
+												<div class="checkout-form">
+													<p style="color: red">{{ error_message }}</p>
+												</div>
+												<div class="col-lg-12 col-md-12 col-12">
+													<div class="single-widget get-button">
+														<div class="content">
+															<div class="button">
+																<button class="btn" type="submit">Зарегистрироваться</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</form>
+											<!--/ End User Form -->
+										</div>
 									</div>
 								</div>
 							</div>
+							<!--/ End User Tab -->
+							<!-- Start Salesman Tab -->
+							<div class="tab-pane fade" id="salesman" role="tabpanel">
+								<div class="tab-single">
+									<div class="col-lg-6 col-12">
+										<div class="checkout-form">
+											<!-- Salesman Form -->
+											<form class="form" method="post" action="{% url 'signup' %}?salesman=true">
+												{% csrf_token %}
+												<div class="row">
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="form-group">
+															<label>Имя Мастера<span>*</span></label>
+															<input type="text" name="username" placeholder="" required="required">
+														</div>
+													</div>
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="form-group">
+															<label>Email<span>*</span></label>
+															<input type="email" name="email" placeholder="" required="required">
+														</div>
+													</div>
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="form-group">
+															<label>Телефон<span>*</span></label>
+															<input type="tel" name="phone" placeholder="" required="required">
+														</div>
+													</div>
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="single-widget">
+															<div class="content">
+																<div class="button">
+																	<label>Выберите фото<span>*</span></label>
+																	<input type="file" accept="image/jpeg,image/png" name="photo" placeholder="Выберите фото" required="required">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="form-group">
+															<label>Информация о себе</label>
+															<input type="text" name="description" placeholder="">
+														</div>
+													</div>
+													<div class="col-lg-6 col-md-6 col-12">
+														<div class="form-group">
+															<label>Пароль<span>*</span></label>
+															<input type="password" name="password1" placeholder="" required="required">
+														</div>
+													</div>
+													<div class="col-lg-6 col-md-6 col-12">
+														<div class="form-group">
+															<label>Повторите пароль<span>*</span></label>
+															<input type="password" name="password2" placeholder="" required="required">
+														</div>
+													</div>
+												</div>
+												<div class="checkout-form">
+													<p style="color: red">{{ error_message }}</p>
+												</div>
+												<div class="col-lg-12 col-md-12 col-12">
+													<div class="single-widget get-button">
+														<div class="content">
+															<div class="button">
+																<button class="btn" type="submit">Зарегистрироваться</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</form>
+											<!-- End Salesman Form -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--/ End Salesman Tab -->
 						</div>
-					</form>
-					<!--/ End Form -->
-				</div>
-			</div>
-
+                    </div>
+                </div>
+            </div>
 		</div>
 	</div>
 </section>
 <!--/ End Checkout -->
-{% endblock %}
-
-{% block scripts %}
-<!-- Jquery -->
-<script src="{% static "js/jquery.min.js" %}"></script>
-<script src="{% static "js/jquery-migrate-3.0.0.js" %}"></script>
-<script src="{% static "js/jquery-ui.min.js" %}"></script>
-<!-- Popper JS -->
-<script src="{% static "js/popper.min.js" %}"></script>
-<!-- Bootstrap JS -->
-<script src="{% static "js/bootstrap.min.js" %}"></script>
-<!-- Slicknav JS -->
-<script src="{% static "js/slicknav.min.js" %}"></script>
-<!-- Owl Carousel JS -->
-<script src="{% static "js/owl-carousel.js" %}"></script>
-<!-- Magnific Popup JS -->
-<script src="{% static "js/magnific-popup.js" %}"></script>
-<!-- Fancybox JS -->
-<script src="{% static "js/facnybox.min.js" %}"></script>
-<!-- Waypoints JS -->
-<script src="{% static "js/waypoints.min.js" %}"></script>
-<!-- Countdown JS -->
-<script src="{% static "js/finalcountdown.min.js" %}"></script>
-<!-- Nice Select JS -->
-<script src="{% static "js/nicesellect.js" %}"></script>
-<!-- Ytplayer JS -->
-<script src="{% static "js/ytplayer.min.js" %}"></script>
-<!-- Flex Slider JS -->
-<script src="{% static "js/flex-slider.js" %}"></script>
-<!-- ScrollUp JS -->
-<script src="{% static "js/scrollup.js" %}"></script>
-<!-- Onepage Nav JS -->
-<script src="{% static "js/onepage-nav.min.js" %}"></script>
-<!-- Easing JS -->
-<script src="{% static "js/easing.js" %}"></script>
-<!-- Active JS -->
-<script src="{% static "js/active.js" %}"></script>
 {% endblock %}
