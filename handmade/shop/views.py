@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm
+from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, ChangeSalesmanInfoForm
 from .models import *
 
 
@@ -48,7 +48,7 @@ def signup_page(request):
                 login(request, user)
                 return redirect('home')
             else:
-                context['error_message'] = 'Ошибка в заполнении формы'
+                context['error_message'] = form.errors
     return render(request, 'signup.html', context)
 
 
@@ -64,9 +64,9 @@ def login_page(request):
                 login(request, user)
                 return redirect('home')
             else:
-                context['error_message'] = 'Неверный логин или пароль'
+                context['error_message'] = form.errors
         else:
-            context['error_message'] = form.error_messages
+            context['error_message'] = form.errors
     return render(request, 'login.html', context)
 
 
@@ -106,7 +106,6 @@ def products_page(request):
         context['products'] = Product.objects.all().order_by('-add_date')
         context['categories'] = categories = Category.objects.all()
         context['parent_categories_id'] = _get_parent_categories_id(categories)
-    context['photos'] = ProductPhoto.objects.filter(number=1)
     return render(request, 'products.html', context)
 
 
@@ -137,25 +136,16 @@ def _category_way(category_id):
     return way
 
 
-def _get_product_photos(product_list):
-    result = []
-    for product in product_list:
-        result.append(ProductPhoto.objects.get(product=product, number=1))
-    return result
-
-
 def product_info(request):
     product_id = request.GET.get('product_id')
     product = Product.objects.get(id=product_id)
-    photos = ProductPhoto.objects.filter(product=product).order_by('number')
     context = {'salesman': product.salesman,
-               'product': product,
-               'photos': photos}
+               'product': product}
     return render(request, 'product_info.html', context)
 
 
 def salesmans_page(request):
-    salesmans = Salesman.objects.all().order_by('name')
+    salesmans = Salesman.objects.all()
     context = {'salesmans': salesmans}
     return render(request, 'salesmans.html', context)
 
@@ -164,13 +154,72 @@ def salesman_info_page(request):
     salesman_id = request.GET.get('salesman_id')
     salesman = Salesman.objects.get(id=salesman_id)
     products = Product.objects.filter(salesman=salesman).order_by('-add_date')
-    photos = []
-    for product in products:
-        photos.append(ProductPhoto.objects.get(product=product, number=1))
     context = {'salesman': salesman,
-               'products': products,
-               'photos': photos}
+               'products': products}
     return render(request, 'salesman_info.html', context)
+
+
+def account_page(request):
+    if request.user.first_name:
+        salesman = Salesman.objects.get(user=request.user)
+        products = Product.objects.filter(salesman=salesman).order_by('-add_date')
+        context = {'salesman': salesman,
+                   'products': products}
+        return render(request, 'account.html', context)
+    else:
+        return redirect('cart')
+
+
+def product_add_form(request):
+    context = {'success': False}
+    if request.method == 'POST':
+        form = AddProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = request.user
+            salesman = Salesman.objects.get(user=user)
+            Product.objects.create(salesman=salesman,
+                                   name=request.POST.get('name'),
+                                   description=request.POST.get('description'),
+                                   main_photo=request.FILES['main_photo'],
+                                   price=request.POST.get('price'))
+            context['success'] = True
+        else:
+            context['error_message'] = form.errors
+    else:
+        root_categories = Category.objects.filter(parent_category_id=None)
+        categories = []
+        for root in root_categories:
+            categories += _sub_categories_list(root, [])
+        context['categories'] = categories
+    return render(request, 'product_add_form.html', context)
+
+
+def change_personal_info(request):
+    salesman = Salesman.objects.get(user=request.user)
+    context = {'salesman': salesman}
+    if request.method == 'POST':
+        form = ChangeSalesmanInfoForm(request.POST)
+        if form.is_valid():
+            first_name = request.POST.get('first_name')
+            if first_name:
+                salesman.user.first_name = first_name
+            if 'photo' not in request.POST.keys():
+                salesman.photo = request.FILES['photo']
+            description = request.POST.get('description')
+            if description:
+                salesman.description = description
+            phone = request.POST.get('phone')
+            if phone:
+                salesman.phone = phone
+            email = request.POST.get('email')
+            if email:
+                salesman.user.email = email
+            salesman.user.save()
+            salesman.save()
+            return redirect('account')
+        else:
+            context['error_message'] = form.errors
+    return render(request, 'change_personal_info.html', context)
 
 
 def about_page(request):

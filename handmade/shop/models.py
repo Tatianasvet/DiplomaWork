@@ -3,7 +3,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 
-def category_choice():
+def id_category_choice():
     res = {}
     id_list = Category.objects.values('id')
     for id_dict in id_list:
@@ -14,7 +14,7 @@ def category_choice():
 class Category(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
-    parent_category_id = models.PositiveSmallIntegerField(choices=category_choice, null=True, blank=True)
+    parent_category_id = models.PositiveSmallIntegerField(choices=id_category_choice, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -31,7 +31,7 @@ class Salesman(models.Model):
     moderate = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.username
+        return self.user.first_name
 
 
 class Recommendations(models.Model):
@@ -56,6 +56,7 @@ class Product(models.Model):
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     price = models.PositiveIntegerField(default=1)
+    main_photo = models.ImageField(upload_to="static/product_photo", null=True, blank=True)
     likes = models.ManyToManyField(User, related_name='like', null=True, blank=True)
     select = models.ManyToManyField(User, related_name='select', null=True, blank=True)
     add_date = models.DateTimeField(auto_now_add=True)
@@ -63,16 +64,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class ProductPhoto(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to="static/product_photo")
-    number = models.PositiveSmallIntegerField(default=1)
-    moderate = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'{self.product.name}_photo_{self.number}'
 
 
 class SalesmanScore(models.Model):

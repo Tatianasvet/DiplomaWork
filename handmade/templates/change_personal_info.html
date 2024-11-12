@@ -10,43 +10,83 @@
 {% endblock %}
 
 {% block content %}
+<!-- Back Button -->
+<section class="shop checkout section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-12">
+				<div class="content">
+					<div class="button">
+						<a href="{% url 'account' %}">
+							<button class="btn" type="button">
+								<i class="fa fa-angle-left" aria-hidden="true"></i> ВЕРНУТЬСЯ НАЗАД
+							</button>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- /End Back Button -->
 <!-- Start Checkout -->
 <section class="shop checkout section">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8 col-12">
 				<div class="checkout-form">
-					<h2>Добро пожаловать на биржу рукоделия</h2>
-					<p>Для регистрации заполните форму</p>
+					<h2>Личные данные</h2>
+					<p>Для изменения заполните форму</p>
 				</div>
 			</div>
 			<div class="col-lg-6 col-12">
 				<div class="checkout-form">
 					<!-- Form -->
-					<form class="form" method="post" action="#">
+					<form class="form" enctype="multipart/form-data" method="post" action="#">
 						{% csrf_token %}
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-12">
 								<div class="form-group">
-									<label>Имя пользователя<span>*</span></label>
-									<input type="text" name="username" placeholder="" required="required">
+									<label>Имя</label>
+									<input type="text" name="first_name" placeholder="{{ salesman.user.first_name }}">
 								</div>
 							</div>
-							<div class="col-lg-6 col-md-6 col-12">
+                            <div class="content">
+								<div class="button">
+									<label>Фото</label>
+									<input type="file" accept="image/jpeg,image/png" name="photo" placeholder="Выберите фото">
+								</div>
+							</div>
+							<div class="col-lg-12 col-md-12 col-12">
 								<div class="form-group">
-									<label>Пароль<span>*</span></label>
-									<input type="password" name="password" placeholder="" required="required">
+									<label>Описание</label>
+									<input type="text" name="description" placeholder="{{ salesman.description }}">
 								</div>
 							</div>
+                            <div class="col-lg-12 col-md-12 col-12">
+                                <div class="form-group">
+                                    <label>Телефон</label>
+                                    <input type="tel" name="phone" placeholder="{{ salesman.phone }}">
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-12">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" name="email" placeholder="{{ salesman.user.email }}">
+                                </div>
+                            </div>
+							<p>
+								{{ error_message }}
+							</p>
 						</div>
-						<div class="checkout-form">
+						<div class="checkout-form" style="color: red">
 							<p style="color: red">{{ error_message }}</p>
 						</div>
 						<div class="col-lg-12 col-md-12 col-12">
 							<div class="single-widget get-button">
 								<div class="content">
 									<div class="button">
-										<button class="btn" type="submit">Войти</button>
+										<button class="btn" type="submit">сохранить изменения</button>
 									</div>
 								</div>
 							</div>
@@ -55,7 +95,6 @@
 					<!--/ End Form -->
 				</div>
 			</div>
-
 		</div>
 	</div>
 </section>

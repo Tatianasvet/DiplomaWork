@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50)),
                 ('description', models.TextField()),
-                ('parent_category_id', models.PositiveSmallIntegerField(blank=True, choices=shop.models.category_choice, null=True)),
+                ('parent_category_id', models.PositiveSmallIntegerField(blank=True, choices=shop.models.id_category_choice, null=True)),
             ],
         ),
         migrations.CreateModel(

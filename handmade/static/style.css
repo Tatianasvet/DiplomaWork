@@ -4721,6 +4721,9 @@ Version:1.0
 	color: #333;
 	font-size: 18px;
 }
+.contact-us .button {
+	text-align:center;
+}
 .contact-us .form-main {
 	box-shadow: 0px 0px 15px #0000001a;
 	padding: 50px;

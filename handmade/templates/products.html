@@ -130,8 +130,8 @@
                                             <div class="single-product">
                                                 <div class="product-img">
                                                     <a href="{% url 'product_info' %}?product_id={{ product.id }}">
-                                                        <img class="default-img" src={% for image in photos %} {% if image.product == product %} "/{{ image.photo }}" {% endif %} {% endfor %} alt="#">
-                                                        <img class="hover-img" src={% for image in photos %} {% if image.product == product %} "/{{ image.photo }}" {% endif %} {% endfor %} alt="#">
+                                                        <img class="default-img" src="/{{ product.main_photo }}" alt="#">
+                                                        <img class="hover-img" src="/{{ product.main_photo }}" alt="#">
                                                     </a>
                                                     <div class="button-head">
                                                         <div class="product-action">

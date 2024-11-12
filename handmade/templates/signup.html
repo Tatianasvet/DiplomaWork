@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block category %}
+{% block CATEGORY %}
 {% endblock %}
 
 {% block menu_home_button %}
@@ -70,8 +70,8 @@
 														</div>
 													</div>
 												</div>
-												<div class="checkout-form">
-													<p style="color: red">{{ error_message }}</p>
+												<div class="checkout-form" style="color: red">
+													<p>{{ error_message }}</p>
 												</div>
 												<div class="col-lg-12 col-md-12 col-12">
 													<div class="single-widget get-button">
@@ -100,8 +100,14 @@
 												<div class="row">
 													<div class="col-lg-12 col-md-12 col-12">
 														<div class="form-group">
-															<label>Имя Мастера<span>*</span></label>
-															<input type="text" name="username" placeholder="" required="required">
+															<label>Username (уникальное имя пользователя)<span>*</span></label>
+															<input type="text" name="username" placeholder="username_example" required="required">
+														</div>
+													</div>
+													<div class="col-lg-12 col-md-12 col-12">
+														<div class="form-group">
+															<label>Имя мастера (будет отображаться на вашей странице)<span>*</span></label>
+															<input type="text" name="first_name" placeholder="" required="required">
 														</div>
 													</div>
 													<div class="col-lg-12 col-md-12 col-12">
@@ -145,8 +151,8 @@
 														</div>
 													</div>
 												</div>
-												<div class="checkout-form">
-													<p style="color: red">{{ error_message }}</p>
+												<div class="checkout-form" style="color: red">
+													<p>{{ error_message }}</p>
 												</div>
 												<div class="col-lg-12 col-md-12 col-12">
 													<div class="single-widget get-button">

@@ -83,8 +83,12 @@
 						<!-- Top Right -->
 						<div class="right-content">
 							<ul class="list-main">
-								<li><a href={% url 'cart' %}>Мой Аккаунт</a></li>
 								{% if user.is_active %}
+									{% if user.first_name %}
+										<li><a href={% url 'account' %}>Мой Аккаунт</a></li>
+									{% else %}
+										<li><a href={% url 'cart' %}>Мой Аккаунт</a></li>
+									{% endif %}
 								<li><i class="ti-user"></i><a href={% url 'logout' %}>Выход</a></li>
 								{% else %}
 								<li><i class="ti-user"></i><a href={% url 'login' %}>Вход</a></li>
@@ -104,7 +108,7 @@
 					<div class="col-lg-2 col-md-2 col-12">
 						<!-- Logo -->
 						<div class="logo">
-							<a href="#"><img src="{% static "images/logo-1.png" %}" alt="logo"></a>
+							<a href={% url 'home' %}><img src="{% static "images/logo-1.png" %}" alt="logo"></a>
 						</div>
 						<!--/ End Logo -->
 						<!-- Search Form -->

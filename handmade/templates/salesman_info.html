@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block category %}
+{% block CATEGORY %}
 {% endblock %}
 
 {% block menu_home_button %}
@@ -24,7 +24,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="form-main">
                         <div class="title">
-                            <h3>{{ salesman.name }}</h3>
+                            <h3>{{ salesman.user.first_name }}</h3>
                         </div>
                         <p>{{ salesman.description }}</p>
                     </div>
@@ -36,8 +36,8 @@
                                     <div class="single-product">
                                         <div class="product-img">
                                             <a href="{% url 'product_info' %}?product_id={{ product.id }}">
-                                                <img class="default-img" src={% for image in photos %} {% if image.product == product %} "/{{ image.photo }}" {% endif %} {% endfor %} alt="#">
-                                                <img class="hover-img" src={% for image in photos %} {% if image.product == product %} "/{{ image.photo }}" {% endif %} {% endfor %} alt="#">
+                                                <img class="default-img" src="/{{ product.main_photo }}" alt="#">
+                                                <img class="hover-img" src="/{{ product.main_photo }}" alt="#">
                                             </a>
                                             <div class="button-head">
                                                 <div class="product-action">
@@ -77,7 +77,7 @@
                             <i class="fa fa-envelope-open"></i>
                             <h4 class="title">Email:</h4>
                             <ul>
-                                <li>{{ salesman.email }}</li>
+                                <li>{{ user.email }}</li>
                             </ul>
                         </div>
                     </div>
