@@ -177,10 +177,13 @@ def product_add_form(request):
         if form.is_valid():
             user = request.user
             salesman = Salesman.objects.get(user=user)
+            category_id = request.POST.get('category_id')
+            category = Category.objects.get(id=category_id)
             Product.objects.create(salesman=salesman,
                                    name=request.POST.get('name'),
                                    description=request.POST.get('description'),
                                    main_photo=request.FILES['main_photo'],
+                                   category=category,
                                    price=request.POST.get('price'))
             context['success'] = True
         else:
@@ -220,6 +223,30 @@ def change_personal_info(request):
         else:
             context['error_message'] = form.errors
     return render(request, 'change_personal_info.html', context)
+
+
+def delite_consent_page(request):
+    object_type = request.GET.get('object_type')
+    target_id = request.GET.get('target_id')
+    context = {'consent': False,
+               'object_type': object_type,
+               'target_id': request.GET.get('target_id')}
+    if object_type == 'salesman':
+        salesman = Salesman.objects.get(id=target_id)
+        context['question'] = f'Вы уверены, что хотите удалить все данные о мастере {salesman.user.first_name}?'
+        if request.method == 'POST':
+            if request.POST.get('answer') == 'yes':
+                salesman.delete()
+                return redirect('home')
+            return redirect('account')
+    elif object_type == 'product':
+        product = Product.objects.get(id=target_id)
+        context['question'] = f'Вы уверены, что хотите удалить товар {product.name}?'
+        if request.method == 'POST':
+            if request.POST.get('answer') == 'yes':
+                product.delete()
+            return redirect('account')
+    return render(request, 'consent_page.html', context)
 
 
 def about_page(request):

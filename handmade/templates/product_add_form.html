@@ -90,9 +90,9 @@
 							<div class="col-lg-12 col-md-12 col-12">
 								<div class="form-group">
 									<label>Категория<span>*</span></label>
-									<select name="categories">
+									<select name="category_id">
 										{% for category in categories %}
-											<option value={{ category }}>{{ category.name }}</option>
+											<option value={{ category.id }}>{{ category.name }}</option>
 										{% endfor %}
 									</select>
 								</div>
