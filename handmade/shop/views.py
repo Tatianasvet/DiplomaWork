@@ -26,26 +26,25 @@ def _get_parent_categories_id(categories):
 def search(request):
     if request.method == 'POST':
         search_mode = request.POST.get('mode')
-        query = request.POST.get('search').lower()
+        query = request.POST.get('search')
         context = {}
         if search_mode == 'product':
             lookup = Q(name__icontains=query) | Q(description__icontains=query)
             query_categories = Category.objects.filter(lookup)
             lookup = lookup | Q(category__in=query_categories)
-            products = Product.objects.filter(lookup)
             min_price = request.POST.get('min_price')
             max_price = request.POST.get('max_price')
             if min_price:
-                products.filter(price__gte=min_price)
+                lookup = lookup & Q(price__gte=int(min_price))
             if max_price:
-                products.filter(price__lte=max_price)
-            context['products'] = products.order_by('-add_date')
+                lookup = lookup & Q(price__lte=int(max_price))
+            products = Product.objects.filter(lookup).order_by('-add_date')
+            context['products'] = products
             context['category'] = False
             context['categories'] = categories = Category.objects.all()
             context['parent_categories_id'] = _get_parent_categories_id(categories)
             return render(request, 'products.html', context)
         elif search_mode == 'salesman':
-
             users = User.objects.filter(first_name__contains=query)
             print(users)
             lookup = Q(description__contains=query) | Q(user__in=users)
