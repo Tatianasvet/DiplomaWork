@@ -111,33 +111,18 @@
 							<a href={% url 'home' %}><img src="{% static "images/logo-1.png" %}" alt="logo"></a>
 						</div>
 						<!--/ End Logo -->
-						<!-- Search Form -->
-						<div class="search-top">
-							<div class="top-search"><a href="#0"><i class="ti-search"></i></a></div>
-							<!-- Search Form -->
-							<div class="search-top">
-								<form class="search-form">
-									<input type="text" placeholder="Search here..." name="search">
-									<button value="search" type="submit"><i class="ti-search"></i></button>
-								</form>
-							</div>
-							<!--/ End Search Form -->
-						</div>
-						<!--/ End Search Form -->
-						<div class="mobile-nav"></div>
 					</div>
 					<div class="col-lg-8 col-md-7 col-12">
 						<div class="search-bar-top">
 							<div class="search-bar">
-								<select>
-									<option selected="selected">все категории</option>
-									<option>вышивка</option>
-									<option>роспись</option>
-									<option>...</option>
+								<select name="mode" form="search">
+									<option class="active" value="product">товары</option>
+									<option value="salesman">мастера</option>
 								</select>
-								<form>
+								<form id="search" method="post" action="{% url 'search' %}">
+									{% csrf_token %}
 									<input name="search" placeholder="Найдите товар или мастера здесь....." type="search">
-									<button class="btnn"><i class="ti-search"></i></button>
+									<button class="btnn" type="submit"><i class="ti-search"></i></button>
 								</form>
 							</div>
 						</div>

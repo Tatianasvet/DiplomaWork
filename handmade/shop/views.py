@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from django.db.models import Q
 from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, ChangeSalesmanInfoForm
 from .models import *
 
@@ -20,6 +21,38 @@ def _get_parent_categories_id(categories):
                 parent_categories_id.append(check_category.id)
                 break
     return parent_categories_id
+
+
+def search(request):
+    if request.method == 'POST':
+        search_mode = request.POST.get('mode')
+        query = request.POST.get('search').lower()
+        context = {}
+        if search_mode == 'product':
+            lookup = Q(name__icontains=query) | Q(description__icontains=query)
+            query_categories = Category.objects.filter(lookup)
+            lookup = lookup | Q(category__in=query_categories)
+            products = Product.objects.filter(lookup)
+            min_price = request.POST.get('min_price')
+            max_price = request.POST.get('max_price')
+            if min_price:
+                products.filter(price__gte=min_price)
+            if max_price:
+                products.filter(price__lte=max_price)
+            context['products'] = products.order_by('-add_date')
+            context['category'] = False
+            context['categories'] = categories = Category.objects.all()
+            context['parent_categories_id'] = _get_parent_categories_id(categories)
+            return render(request, 'products.html', context)
+        elif search_mode == 'salesman':
+
+            users = User.objects.filter(first_name__contains=query)
+            print(users)
+            lookup = Q(description__contains=query) | Q(user__in=users)
+            salesmans = Salesman.objects.filter(lookup)
+            print(salesmans)
+            context['salesmans'] = salesmans
+            return render(request, 'salesmans.html', context)
 
 
 def signup_page(request):
@@ -72,8 +105,7 @@ def login_page(request):
 
 def do_logout(request):
     logout(request)
-    context = {'user': request.user}
-    return render(request, 'index.html', context)
+    return redirect('home')
 
 
 def cart_page(request):
