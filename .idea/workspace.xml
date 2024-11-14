@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="search">
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="search with filter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/handmade/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/static/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/account.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/account.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/templates/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/products.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/templates/salesmans.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/salesmans.html" afterDir="false" />
     </list>
@@ -259,7 +265,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731535868289</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="search with filter">
+      <option name="closed" value="true" />
+      <created>1731538678964</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1731538678964</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -293,6 +307,7 @@
     <MESSAGE value="salesman account" />
     <MESSAGE value="salesman account complete" />
     <MESSAGE value="search" />
-    <option name="LAST_COMMIT_MESSAGE" value="search" />
+    <MESSAGE value="search with filter" />
+    <option name="LAST_COMMIT_MESSAGE" value="search with filter" />
   </component>
 </project>

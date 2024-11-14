@@ -26,32 +26,82 @@ def _get_parent_categories_id(categories):
 def search(request):
     if request.method == 'POST':
         search_mode = request.POST.get('mode')
+        limitation = _get_search_limitations(request)
         query = request.POST.get('search')
-        context = {}
+        if query == '':
+            return products_page(request)
+        sub_query_1 = query.lower()
+        sub_query_2 = query.upper()
+        if len(query) > 3:
+            sub_query_2 = query[1:]
         if search_mode == 'product':
-            lookup = Q(name__icontains=query) | Q(description__icontains=query)
-            query_categories = Category.objects.filter(lookup)
-            lookup = lookup | Q(category__in=query_categories)
-            min_price = request.POST.get('min_price')
-            max_price = request.POST.get('max_price')
-            if min_price:
-                lookup = lookup & Q(price__gte=int(min_price))
-            if max_price:
-                lookup = lookup & Q(price__lte=int(max_price))
-            products = Product.objects.filter(lookup).order_by('-add_date')
-            context['products'] = products
-            context['category'] = False
+            # Приоритеты поиска
+            lookup1 = Q(name=query)
+            lookup2 = Q(name__icontains=query) | Q(name__icontains=sub_query_1) | Q(name__icontains=sub_query_2)
+            lookup3 = Q(description__icontains=query) | Q(description__icontains=sub_query_1) | Q(description__icontains=sub_query_2)
+            query_categories_1 = Category.objects.filter(lookup2)
+            lookup4 = Q(category__in=query_categories_1)
+            query_categories_2 = Category.objects.filter(lookup3)
+            lookup5 = Q(category__in=query_categories_2)
+            # поиск в базе данных
+            priorities = []
+            for lookup in [lookup1, lookup2, lookup3, lookup4, lookup5]:
+                priorities.append(Product.objects.filter(lookup & limitation).order_by('-add_date'))
+            clear_priorities = _delete_duplicates(priorities)
+            # контекст
+            context = {'priorities': clear_priorities,
+                       'category': False,
+                       'min_price': request.POST.get('min_price'),
+                       'max_price': request.POST.get('max_price'),
+                       'search_response': f'По запросу \"{query}\" найдено {_result_count(clear_priorities)} товаров'}
             context['categories'] = categories = Category.objects.all()
+            context['search_query'] = query
             context['parent_categories_id'] = _get_parent_categories_id(categories)
             return render(request, 'products.html', context)
         elif search_mode == 'salesman':
-            users = User.objects.filter(first_name__contains=query)
-            print(users)
-            lookup = Q(description__contains=query) | Q(user__in=users)
-            salesmans = Salesman.objects.filter(lookup)
-            print(salesmans)
-            context['salesmans'] = salesmans
+            user_lookup = Q(first_name__icontains=query) | Q(first_name__icontains=sub_query_1) | Q(first_name__icontains=sub_query_2)
+            users = User.objects.filter(user_lookup)
+            lookup1 = Q(user__in=users)
+            lookup2 = Q(description__icontains=query) | Q(description__icontains=sub_query_1) | Q(description__icontains=sub_query_2)
+            priorities = [Salesman.objects.filter(lookup1 & limitation),
+                          Salesman.objects.filter(lookup2 & limitation)]
+            clear_priorities = _delete_duplicates(priorities)
+            context = {'priorities': _delete_duplicates(priorities),
+                       'search_query': query,
+                       'search_response': f'По запросу \"{query}\" найдено {_result_count(clear_priorities)} мастеров'}
             return render(request, 'salesmans.html', context)
+
+
+def _delete_duplicates(priorities):
+    id_list = []
+    result = []
+    for original_set in priorities:
+        clear_set = []
+        for iter_object in original_set:
+            if iter_object.id not in id_list:
+                clear_set.append(iter_object)
+                id_list.append(iter_object.id)
+        result.append(clear_set)
+    return result
+
+
+def _result_count(priorities):
+    count = 0
+    for clear_set in priorities:
+        count += len(clear_set)
+    return count
+
+
+def _get_search_limitations(request):
+    limitation = Q(moderate__exact=True)
+    if request.method == 'POST':
+        min_price = request.POST.get('min_price')
+        max_price = request.POST.get('max_price')
+        if min_price:
+            limitation = limitation & Q(price__gte=int(min_price))
+        if max_price:
+            limitation = limitation & Q(price__lte=int(max_price))
+    return limitation
 
 
 def signup_page(request):
@@ -125,22 +175,26 @@ def checkout_page(request):
 
 def products_page(request):
     category_id = request.GET.get('category_id')
+    limitation = _get_search_limitations(request)
     context = {}
+    if request.method == 'POST':
+        context['min_price'] = request.POST.get('min_price')
+        context['max_price'] = request.POST.get('max_price')
     if category_id:
         context['category'] = category = Category.objects.get(id=category_id)
         context['way'] = _category_way(category_id)
         context['categories'] = categories = _sub_categories_list(category, [])
         context['parent_categories_id'] = _get_parent_categories_id(categories)
-        context['products'] = _get_products_by_categories_list(categories)
+        context['priorities'] = [_get_products_by_categories_list(categories, limitation),]
     else:
         context['category'] = False
-        context['products'] = Product.objects.all().order_by('-add_date')
+        context['priorities'] = [Product.objects.filter(limitation).order_by('-add_date'),]
         context['categories'] = categories = Category.objects.all()
         context['parent_categories_id'] = _get_parent_categories_id(categories)
     return render(request, 'products.html', context)
 
 
-def _sub_categories_list(parent_category, category_list):
+def _sub_categories_list(parent_category, category_list) -> list:
     category_list.append(parent_category)
     for sub_category in Category.objects.all():
         if sub_category.parent_category_id == parent_category.id:
@@ -148,10 +202,10 @@ def _sub_categories_list(parent_category, category_list):
     return category_list
 
 
-def _get_products_by_categories_list(categories_list):
+def _get_products_by_categories_list(categories_list, limitation):
     result = []
     for category in categories_list:
-        products = Product.objects.filter(category=category)
+        products = Product.objects.filter(Q(category__exact=category) & limitation).order_by('-add_date')
         for product in products:
             result.append(product)
     return result
@@ -167,6 +221,14 @@ def _category_way(category_id):
     return way
 
 
+def add_to_cart(request):
+    user = request.user
+    product_id = request.GET.get('product_id')
+    product = Product.objects.get(id=product_id)
+    product.select.add(user)
+    product.save()
+
+
 def product_info(request):
     product_id = request.GET.get('product_id')
     product = Product.objects.get(id=product_id)
@@ -176,15 +238,18 @@ def product_info(request):
 
 
 def salesmans_page(request):
-    salesmans = Salesman.objects.all()
-    context = {'salesmans': salesmans}
+    limitation = Q(moderate__exact=True)
+    salesmans = Salesman.objects.filter(limitation)
+    context = {'priorities': [salesmans,]}
     return render(request, 'salesmans.html', context)
 
 
 def salesman_info_page(request):
     salesman_id = request.GET.get('salesman_id')
     salesman = Salesman.objects.get(id=salesman_id)
-    products = Product.objects.filter(salesman=salesman).order_by('-add_date')
+    limitation = Q(moderate__exact=True)
+    query = Q(salesman__exact=salesman)
+    products = Product.objects.filter(query & limitation).order_by('-add_date')
     context = {'salesman': salesman,
                'products': products}
     return render(request, 'salesman_info.html', context)

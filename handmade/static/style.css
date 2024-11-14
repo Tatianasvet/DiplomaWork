@@ -1892,6 +1892,10 @@ Version:1.0
 .single-product .product-img .product-action a i {
   line-height: 40px;
 }
+.single-product .product-img .product-action .active a i {
+	color: red;
+	font-size: xx-large;
+}
 .single-product .product-img .product-action a span {
 	visibility: hidden;
 	position: absolute;

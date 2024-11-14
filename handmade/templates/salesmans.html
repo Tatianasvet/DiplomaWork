@@ -16,6 +16,21 @@
 {% endblock %}
 
 {% block content %}
+<!-- Start Search Response -->
+{% if search_response %}
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bread-inner">
+                        <p>{{ search_response }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<!-- /End Search Response -->
 <!-- Start Salesmans Area -->
 <div class="product-area section">
     <div class="container">
@@ -30,29 +45,31 @@
             <div class="col-12">
                 <div class="product-info">
                     <div class="row">
-                        {% for salesman in salesmans %}
-                        <div class="col-xl-3 col-lg-4 col-md-4 col-12">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="{% url 'salesman_info' %}?salesman_id={{ salesman.id }}">
-                                        <img class="default-img" src="/{{ salesman.photo }}" alt="#">
-                                        <img class="hover-img" src="/{{ salesman.photo }}" alt="#">
-                                    </a>
-                                    <div class="button-head">
-                                        <div class="product-action">
-                                            <!--<label>{{ salesman.likes.count }}</label>-->
-                                            <a title="Нравится" href="#"><i class=" ti-heart "></i><span>Нравится</span></a>
-                                        </div>
-                                        <div class="product-action-2">
-                                            <a title="Подробнее" href="{% url 'salesman_info' %}?salesman_id={{ salesman.id }}">Перейти на страницу</a>
+                        {% for salesmans in priorities %}
+                            {% for salesman in salesmans %}
+                            <div class="col-xl-3 col-lg-4 col-md-4 col-12">
+                                <div class="single-product">
+                                    <div class="product-img">
+                                        <a href="{% url 'salesman_info' %}?salesman_id={{ salesman.id }}">
+                                            <img class="default-img" src="/{{ salesman.photo }}" alt="#">
+                                            <img class="hover-img" src="/{{ salesman.photo }}" alt="#">
+                                        </a>
+                                        <div class="button-head">
+                                            <div class="product-action">
+                                                <!--<label>{{ salesman.likes.count }}</label>-->
+                                                <a title="Нравится" href="#"><i class=" ti-heart "></i><span>Нравится</span></a>
+                                            </div>
+                                            <div class="product-action-2">
+                                                <a title="Подробнее" href="{% url 'salesman_info' %}?salesman_id={{ salesman.id }}">Перейти на страницу</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="product-content">
-                                    <h3><a href="{% url 'salesman_info' %}?salesman_id={{ salesman.id }}">{{ salesman.user.first_name }}</a></h3>
+                                    <div class="product-content">
+                                        <h3><a href="{% url 'salesman_info' %}?salesman_id={{ salesman.id }}">{{ salesman.user.first_name }}</a></h3>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            {% endfor %}
                         {% endfor %}
                     </div>
                 </div>

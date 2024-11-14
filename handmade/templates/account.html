@@ -13,7 +13,7 @@
 <div class="shopping-cart section">
 	<div class="container">
 		<div class="row">
-			<div class="col-8">
+			<div class="col-9">
 				<div class="content">
 					<div class="button">
 						<a href="{% url 'product_add_form' %}">
@@ -29,8 +29,9 @@
 						<tr class="main-hading">
 							<th>ТОВАР</th>
 							<th>НАЗВАНИЕ И ОПИСАНИЕ</th>
-							<th class="text-center">ЦЕНА руб.</th>
-							<th class="text-center" >КАТЕГОРИЯ</th>
+							<th class="text-center">ЦЕНА</th>
+							<th class="text-center">КАТЕГОРИЯ</th>
+							<th class="text-center">МОДЕРАЦИЯ</th>
 							<th class="text-center"><i class="ti-trash remove-icon"></i></th>
 						</tr>
 					</thead>
@@ -38,7 +39,9 @@
 						{% for product in products %}
 							<tr>
 								<td class="image" data-title="No">
-									<img src="/{{ product.main_photo }}" alt="#">
+									<a href={% url 'product_info' %}?product_id={{ product.id }}>
+										<img src="/{{ product.main_photo }}" alt="#">
+									</a>
 								</td>
 								<td class="product-des" data-title="Description">
 									<p class="product-name">
@@ -50,6 +53,11 @@
 								</td>
 								<td class="price" data-title="Price"><span>{{ product.price }}</span></td>
 								<td class="price" data-title="Category">{{ product.category.name }}</td>
+								<td class="action">
+									{% if product.moderate %}
+										<i class="ti-check"></i>
+									{% endif %}
+								</td>
 								<td class="action" data-title="Remove">
 									<a href="{% url 'delite_consent' %}?object_type=product&target_id={{ product.id }}">
 										<i class="ti-trash remove-icon"></i>
@@ -62,7 +70,7 @@
 				<!--/ End Shopping Summery -->
 			</div>
 			<!-- Personal info -->
-			<div class="col-lg-4 col-12">
+			<div class="col-lg-3 col-12">
 				<section id="contact-us" class="contact-us section">
 					<div class="single-head">
 						<div class="single-info">

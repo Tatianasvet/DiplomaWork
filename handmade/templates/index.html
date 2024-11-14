@@ -119,9 +119,9 @@
 									<option class="active" value="product">товары</option>
 									<option value="salesman">мастера</option>
 								</select>
-								<form id="search" method="post" action="{% url 'search' %}">
+								<form id="search" method="post" action="{% url 'search' %}{% if category %}?category_id={{ category.id }}{% endif %}">
 									{% csrf_token %}
-									<input name="search" placeholder="Найдите товар или мастера здесь....." type="search">
+									<input name="search" {% if search_query %} placeholder={{ search_query }} {% else %} placeholder="Найдите товар или мастера здесь....." {% endif %} type="search">
 									<button class="btnn" type="submit"><i class="ti-search"></i></button>
 								</form>
 							</div>

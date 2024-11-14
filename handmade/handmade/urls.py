@@ -30,6 +30,7 @@ urlpatterns = [
     path('login/', login_page, name='login'),
     path('logout', do_logout, name='logout'),
     path('products/', products_page, name='products'),
+    path('add_to_cart/', add_to_cart, name='add_to_cart'),
     path('product_info/', product_info, name='product_info'),
     path('salesmans/', salesmans_page, name='salesmans'),
     path('salesman_info/', salesman_info_page, name='salesman_info'),
