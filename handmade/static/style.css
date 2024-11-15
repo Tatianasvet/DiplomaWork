@@ -802,7 +802,7 @@ Version:1.0
 	left: 0;
 	top: 64px;
 	background: #fff;
-	z-index: 2;
+	z-index: 10;
 	width: 100%;
 	-webkit-box-shadow: 0px 5px 15px #0000000a;
 	-moz-box-shadow: 0px 5px 15px #0000000a;
@@ -2991,8 +2991,7 @@ Version:1.0
 }
 .shopping-summery tbody tr img {
 	border-radius: 0;
-	width: 80px;
-	height: 80px;
+	width: 130px;
 }
 .shopping-summery tbody tr:last-child{
 	border:none;
@@ -3027,12 +3026,11 @@ Version:1.0
 	
 }
 .shopping-cart .table .remove-icon{
-	font-size:16px;
+	font-size:18px;
 }
 .shopping-cart .table td {
 	vertical-align: middle;
 	border-top: 1px solid #eee;
-	padding: 30px;
 }
 .shopping-summery tbody .price {
 	text-align: center;

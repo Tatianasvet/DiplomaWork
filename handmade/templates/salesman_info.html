@@ -41,10 +41,28 @@
                                             </a>
                                             <div class="button-head">
                                                 <div class="product-action">
-                                                    <a title="Нравится" href="#"><i class=" ti-heart "></i><span>Нравится</span></a>
+                                                    {% if product.id in like_id_list %}
+                                                        <div class="active">
+                                                            <a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}">
+                                                                {{ product.likes.count }}
+                                                                <i class="ti-heart"></i>
+                                                                <span>Нравится</span>
+                                                            </a>
+                                                        </div>
+                                                    {% else %}
+                                                        <a href="{% url 'like' %}?product_id={{ product.id }}">
+                                                            {{ product.likes.count }}
+                                                            <i class="ti-heart"></i>
+                                                            <span>Нравится</span>
+                                                        </a>
+                                                    {% endif %}
                                                 </div>
                                                 <div class="product-action-2">
-                                                    <a title="Добавить в корзину" href="#">Добавить в корзину</a>
+                                                    {% if product.id in select_id_list %}
+                                                        <a href="{% url 'del_from_cart' %}?product_id={{ product.id }}">Убрать из избранного</a>
+                                                    {% else %}
+                                                        <a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>

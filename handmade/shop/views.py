@@ -1,16 +1,30 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from django.db.models import Q
+from django.db.models import Q, Count
 from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, ChangeSalesmanInfoForm
 from .models import *
 
 
 def start_page(request):
+    limitation = Q(moderate__exact=True)
     categories = Category.objects.all()
     context = {'user': request.user,
                'categories': categories,
-               'parent_categories_id': _get_parent_categories_id(categories)}
+               'parent_categories_id': _get_parent_categories_id(categories),
+               'select_id_list': _get_select_products_id_list(request.user),
+               'like_id_list': _get_like_products_id_list(request.user),
+               'popular_products': _most_popular_products(limitation)}
     return render(request, 'index.html', context)
+
+
+def _most_popular_products(limitation):
+    products = Product.objects.filter(limitation).annotate(like_count=Count('likes')).order_by('-like_count', '-add_date')
+    return products[:8]
+
+
+def _last_selected_products(limitation):
+    products = Product.objects.filter(limitation).order_by('-select_time')
+    return products[:8]
 
 
 def _get_parent_categories_id(categories):
@@ -70,6 +84,8 @@ def search(request):
                        'search_query': query,
                        'search_response': f'По запросу \"{query}\" найдено {_result_count(clear_priorities)} мастеров'}
             return render(request, 'salesmans.html', context)
+    else:
+        return redirect('products')
 
 
 def _delete_duplicates(priorities):
@@ -158,7 +174,9 @@ def do_logout(request):
 
 
 def cart_page(request):
-    return render(request, 'cart.html')
+    products = Product.objects.filter(select=request.user)
+    context = {'products': products}
+    return render(request, 'cart.html', context)
 
 
 def contact_page(request):
@@ -176,7 +194,8 @@ def checkout_page(request):
 def products_page(request):
     category_id = request.GET.get('category_id')
     limitation = _get_search_limitations(request)
-    context = {}
+    context = {'select_id_list': _get_select_products_id_list(request.user),
+               'like_id_list': _get_like_products_id_list(request.user)}
     if request.method == 'POST':
         context['min_price'] = request.POST.get('min_price')
         context['max_price'] = request.POST.get('max_price')
@@ -192,6 +211,22 @@ def products_page(request):
         context['categories'] = categories = Category.objects.all()
         context['parent_categories_id'] = _get_parent_categories_id(categories)
     return render(request, 'products.html', context)
+
+
+def _get_select_products_id_list(user):
+    select_products = Product.objects.filter(select=user)
+    id_list = []
+    for product in select_products:
+        id_list.append(product.id)
+    return id_list
+
+
+def _get_like_products_id_list(user):
+    like_products = Product.objects.filter(likes=user)
+    id_list = []
+    for product in like_products:
+        id_list.append(product.id)
+    return id_list
 
 
 def _sub_categories_list(parent_category, category_list) -> list:
@@ -227,6 +262,32 @@ def add_to_cart(request):
     product = Product.objects.get(id=product_id)
     product.select.add(user)
     product.save()
+    return redirect(request.META['HTTP_REFERER'])
+
+
+def del_from_cart(request):
+    user = request.user
+    product_id = request.GET.get('product_id')
+    product = Product.objects.get(id=product_id)
+    product.select.remove(user)
+    return redirect(request.META['HTTP_REFERER'])
+
+
+def like(request):
+    user = request.user
+    product_id = request.GET.get('product_id')
+    product = Product.objects.get(id=product_id)
+    product.likes.add(user)
+    product.save()
+    return redirect(request.META['HTTP_REFERER'])
+
+
+def dislike(request):
+    user = request.user
+    product_id = request.GET.get('product_id')
+    product = Product.objects.get(id=product_id)
+    product.likes.remove(user)
+    return redirect(request.META['HTTP_REFERER'])
 
 
 def product_info(request):
@@ -251,7 +312,9 @@ def salesman_info_page(request):
     query = Q(salesman__exact=salesman)
     products = Product.objects.filter(query & limitation).order_by('-add_date')
     context = {'salesman': salesman,
-               'products': products}
+               'products': products,
+               'select_id_list': _get_select_products_id_list(request.user),
+               'like_id_list': _get_like_products_id_list(request.user)}
     return render(request, 'salesman_info.html', context)
 
 
@@ -359,3 +422,4 @@ def conditions_page(request):
 
 def payment_page(request):
     return render(request, 'dummy.html')
+

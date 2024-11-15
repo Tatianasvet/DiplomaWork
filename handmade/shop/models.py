@@ -4,6 +4,12 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractUser
 
 
+class CustomUser(AbstractUser):
+
+    def __str__(self):
+        return self.username
+
+
 def id_category_choice():
     res = {}
     id_list = Category.objects.values('id')
@@ -15,17 +21,17 @@ def id_category_choice():
 class Category(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
-    parent_category_id = models.PositiveSmallIntegerField(choices=id_category_choice, null=True, blank=True)
+    parent_category_id = models.PositiveIntegerField(choices=id_category_choice, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
 class Salesman(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     phone = PhoneNumberField()
     photo = models.ImageField(upload_to="static/salesmans_photo")
-    likes = models.ManyToManyField(User, related_name='likes', blank=True)
+    likes = models.ManyToManyField(CustomUser, related_name='likes', blank=True)
     description = models.TextField()
     categories = models.ManyToManyField(Category, related_name='categories', blank=True)
     signup_date = models.DateTimeField(auto_now_add=True)
@@ -58,8 +64,8 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     price = models.PositiveIntegerField(default=1)
     main_photo = models.ImageField(upload_to="static/product_photo", null=True, blank=True)
-    likes = models.ManyToManyField(User, related_name='like', blank=True)
-    select = models.ManyToManyField(User, related_name='select', blank=True)
+    likes = models.ManyToManyField(CustomUser, related_name='like', blank=True)
+    select = models.ManyToManyField(CustomUser, related_name='select', blank=True)
     add_date = models.DateTimeField(auto_now_add=True)
     moderate = models.BooleanField(default=True)
 
@@ -67,20 +73,26 @@ class Product(models.Model):
         return self.name
 
 
+class SelectProduct(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    select_time = models.DateTimeField(auto_now_add=True)
+
+
 class SalesmanScore(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField()
 
 
 class ProductScore(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField()
 
 
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     text = models.TextField()

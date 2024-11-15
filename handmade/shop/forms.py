@@ -1,21 +1,28 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
-from .models import Salesman, Product
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
+from .models import Salesman, Product, CustomUser
 from django import forms
 
 
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=254, help_text='Обязательное поле. Введите действующий email.')
 
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        model = CustomUser
+        fields = ('username', 'email', 'first_name', 'password1', 'password2')
+
+
+class CustomUserChangeForm(UserChangeForm):
+
+    class Meta:
+        model: CustomUser
+        fields = ('username', 'email', 'first_name', 'password1', 'password2')
 
 
 class SalesmanSignUpForm(forms.Form):
+    """
     phone = forms.CharField(max_length=15, required=True)
     photo = forms.ImageField(required=True)
     description = forms.TextInput()
+    """
 
     class Meta:
         model = Salesman
