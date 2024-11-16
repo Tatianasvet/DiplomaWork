@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q, Count
-from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, ChangeSalesmanInfoForm
+from django.core.mail import send_mail
+from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, ChangeSalesmanInfoForm, MailForm
 from .models import *
+
+
+PRODUCT_PER_PAGE_COUNT = 12
 
 
 def start_page(request):
@@ -11,11 +15,12 @@ def start_page(request):
     context = {'user': request.user,
                'categories': categories,
                'parent_categories_id': _get_parent_categories_id(categories),
-               'select_id_list': _get_select_products_id_list(request.user),
-               'like_id_list': _get_like_products_id_list(request.user),
                'popular_products': _most_popular_products(limitation),
                'now_view_products': _now_view_products(limitation),
                'newest_products': _newest_products(limitation)}
+    if not request.user.is_anonymous:
+        context['select_id_list'] = _get_select_products_id_list(request.user)
+        context['like_id_list'] = _get_like_products_id_list(request.user)
     return render(request, 'index.html', context)
 
 
@@ -68,51 +73,76 @@ def search(request):
             priorities = []
             for lookup in [lookup1, lookup2, lookup3, lookup4, lookup5]:
                 priorities.append(Product.objects.filter(lookup & limitation).order_by('-add_date'))
-            clear_priorities = _delete_duplicates(priorities)
             # контекст
-            context = {'priorities': clear_priorities,
-                       'category': False,
+            context = {'category': False,
                        'min_price': request.POST.get('min_price'),
-                       'max_price': request.POST.get('max_price'),
-                       'search_response': f'По запросу \"{query}\" найдено {_result_count(clear_priorities)} товаров'}
+                       'max_price': request.POST.get('max_price')}
+            context = _get_page_products(request, priorities, context)
+            if not request.user.is_anonymous:
+                context['select_id_list'] = _get_select_products_id_list(request.user)
+                context['like_id_list'] = _get_like_products_id_list(request.user)
             context['categories'] = categories = Category.objects.all()
             context['search_query'] = query
             context['parent_categories_id'] = _get_parent_categories_id(categories)
             return render(request, 'products.html', context)
         elif search_mode == 'salesman':
             user_lookup = Q(first_name__icontains=query) | Q(first_name__icontains=sub_query_1) | Q(first_name__icontains=sub_query_2)
-            users = User.objects.filter(user_lookup)
+            users = CustomUser.objects.filter(user_lookup)
             lookup1 = Q(user__in=users)
             lookup2 = Q(description__icontains=query) | Q(description__icontains=sub_query_1) | Q(description__icontains=sub_query_2)
             priorities = [Salesman.objects.filter(lookup1 & limitation),
                           Salesman.objects.filter(lookup2 & limitation)]
-            clear_priorities = _delete_duplicates(priorities)
-            context = {'priorities': _delete_duplicates(priorities),
-                       'search_query': query,
-                       'search_response': f'По запросу \"{query}\" найдено {_result_count(clear_priorities)} мастеров'}
+            context = {'search_query': query}
+            context = _get_page_products(request, priorities, context)
             return render(request, 'salesmans.html', context)
     else:
         return redirect('products')
+
+
+def _get_page_products(request, priorities, context):
+    page_number = _page_number(request)
+    objects = _delete_duplicates(priorities)
+    p = Paginator(objects, PRODUCT_PER_PAGE_COUNT)
+    page = p.page(page_number)
+    context['page'] = page
+    context['current_page_number'] = page_number
+    context['has_previous'] = page.has_previous()
+    if page.has_previous():
+        context['previous_page_number'] = page.previous_page_number()
+    context['has_next'] = page.has_next()
+    if page.has_next():
+        context['next_page_number'] = page.next_page_number()
+    context['page_range'] = p.get_elided_page_range(number=page_number, on_each_side=2, on_ends=1)
+    if request.method == 'POST':
+        search_mode = request.POST.get('mode')
+        query = request.POST.get('search')
+        if search_mode == 'product':
+            context['search_response'] = f'По запросу \"{query}\" найдено {len(objects)} товаров'
+        elif search_mode == 'salesman':
+            context['search_response'] = f'По запросу \"{query}\" найдено {len(objects)} мастеров'
+    return context
 
 
 def _delete_duplicates(priorities):
     id_list = []
     result = []
     for original_set in priorities:
-        clear_set = []
         for iter_object in original_set:
             if iter_object.id not in id_list:
-                clear_set.append(iter_object)
+                result.append(iter_object)
                 id_list.append(iter_object.id)
-        result.append(clear_set)
     return result
 
 
-def _result_count(priorities):
-    count = 0
-    for clear_set in priorities:
-        count += len(clear_set)
-    return count
+def _page_number(request):
+    try:
+        if request.method == 'GET':
+            page_number = int(request.GET.get('page'))
+        elif request.method == 'POST':
+            page_number = int(request.POST.get('page'))
+    except TypeError:
+        page_number = 1
+    return page_number
 
 
 def _get_search_limitations(request):
@@ -187,11 +217,26 @@ def cart_page(request):
 
 
 def contact_page(request):
-    return render(request, 'contact.html')
+    context = {'success': False}
+    if request.method == 'POST':
+        form = MailForm(data=request.POST)
+        if form.is_valid():
+            name = request.POST.get('name')
+            back_email = request.POST.get('email')
+            message = request.POST.get('message') + f'\n\n-----\nС уважением, {name}\n{back_email}'
+            if send_mail(subject=request.POST.get('subject'),
+                         message=message,
+                         from_email='svet_tan@mail.ru',
+                         recipient_list=['manufakture@bk.ru']) == 1:
+                context['success'] = True
+                context['back_email'] = back_email
+        else:
+            context['error_message'] = form.errors
+    return render(request, 'contact.html', context)
 
 
 def reviews_page(request):
-    return render(request, 'reviews.html')
+    return render(request, 'dummy.html')
 
 
 def checkout_page(request):
@@ -201,8 +246,10 @@ def checkout_page(request):
 def products_page(request):
     category_id = request.GET.get('category_id')
     limitation = _get_search_limitations(request)
-    context = {'select_id_list': _get_select_products_id_list(request.user),
-               'like_id_list': _get_like_products_id_list(request.user)}
+    context = {}
+    if not request.user.is_anonymous:
+        context['select_id_list'] = _get_select_products_id_list(request.user)
+        context['like_id_list'] = _get_like_products_id_list(request.user)
     if request.method == 'POST':
         context['min_price'] = request.POST.get('min_price')
         context['max_price'] = request.POST.get('max_price')
@@ -211,12 +258,13 @@ def products_page(request):
         context['way'] = _category_way(category_id)
         context['categories'] = categories = _sub_categories_list(category, [])
         context['parent_categories_id'] = _get_parent_categories_id(categories)
-        context['priorities'] = [_get_products_by_categories_list(categories, limitation),]
+        priorities = _get_products_by_categories_list(categories, limitation)
     else:
         context['category'] = False
-        context['priorities'] = [Product.objects.filter(limitation).order_by('-add_date'),]
+        priorities = [Product.objects.filter(limitation).order_by('-add_date'),]
         context['categories'] = categories = Category.objects.all()
         context['parent_categories_id'] = _get_parent_categories_id(categories)
+    context = _get_page_products(request, priorities, context)
     return render(request, 'products.html', context)
 
 
@@ -247,9 +295,7 @@ def _sub_categories_list(parent_category, category_list) -> list:
 def _get_products_by_categories_list(categories_list, limitation):
     result = []
     for category in categories_list:
-        products = Product.objects.filter(Q(category__exact=category) & limitation).order_by('-add_date')
-        for product in products:
-            result.append(product)
+        result.append(Product.objects.filter(Q(category__exact=category) & limitation).order_by('-add_date'))
     return result
 
 
@@ -307,8 +353,8 @@ def product_info(request):
 
 def salesmans_page(request):
     limitation = Q(moderate__exact=True)
-    salesmans = Salesman.objects.filter(limitation)
-    context = {'priorities': [salesmans,]}
+    priorities = [Salesman.objects.filter(limitation),]
+    context = _get_page_products(request, priorities, {})
     return render(request, 'salesmans.html', context)
 
 
@@ -319,9 +365,10 @@ def salesman_info_page(request):
     query = Q(salesman__exact=salesman)
     products = Product.objects.filter(query & limitation).order_by('-add_date')
     context = {'salesman': salesman,
-               'products': products,
-               'select_id_list': _get_select_products_id_list(request.user),
-               'like_id_list': _get_like_products_id_list(request.user)}
+               'products': products}
+    if not request.user.is_anonymous:
+        context['select_id_list'] = _get_select_products_id_list(request.user)
+        context['like_id_list'] = _get_like_products_id_list(request.user)
     return render(request, 'salesman_info.html', context)
 
 

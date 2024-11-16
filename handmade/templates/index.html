@@ -74,7 +74,7 @@
 						<div class="top-left">
 							<ul class="list-main">
 								<li><i class="ti-headphone-alt"></i> 8 902 257-71-69</li>
-								<li><i class="ti-email"></i> svet_tan@mail.ru</li>
+								<li><i class="ti-email"></i> manufakture@bk.ru</li>
 							</ul>
 						</div>
 						<!--/ End Top Left -->
@@ -119,7 +119,7 @@
 								</select>
 								<form id="search" method="post" action="{% url 'search' %}{% if category %}?category_id={{ category.id }}{% endif %}">
 									{% csrf_token %}
-									<input name="search" {% if search_query %} placeholder={{ search_query }} {% else %} placeholder="Найдите товар или мастера здесь....." {% endif %} type="search">
+									<input name="search" placeholder="Найдите товар или мастера здесь....." type="search">
 									<button class="btnn" type="submit"><i class="ti-search"></i></button>
 								</form>
 							</div>
@@ -254,8 +254,8 @@
 							<div class="row">
 								<div class="col-lg-7 col-12">
 									<div class="hero-text">
-										<h1><span>UP TO 50% OFF </span>Shirt For Man</h1>
-										<p>Maboriosam in a nesciung eget magnae <br> dapibus disting tloctio in the find it pereri <br> odiy maboriosm.</p>
+										<h1><span>Творческая мастерская</span>Manufaktur</h1>
+										<p>Покупайте уникальные изделия, <br>созданные с любовью и заботой о качестве. <br>Широкий ассортимент.</p>
 									</div>
 								</div>
 							</div>
@@ -291,6 +291,7 @@
                                                 <img class="hover-img" src="/{{ product.main_photo }}" alt="#">
                                             </a>
                                             <div class="button-head">
+												{% if not user.is_anonymous %}
                                                 <div class="product-action">
                                                     {% if product.id in like_id_list %}
                                                         <div class="active">
@@ -315,6 +316,18 @@
                                                         <a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
                                                     {% endif %}
                                                 </div>
+												{% else %}
+                                                    <div class="product-action">
+                                                        <a href="{% url 'login' %}">
+                                                            {{ product.likes.count }}
+                                                            <i class="ti-heart"></i>
+                                                            <span>Нравится</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="product-action-2">
+                                                        <a href="{% url 'login' %}">Добавить в избранное</a>
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <div class="product-content">
@@ -355,30 +368,43 @@
 										<img class="hover-img" src="/{{ product.main_photo }}" alt="#">
 									</a>
 									<div class="button-head">
-										<div class="product-action">
-											{% if product.id in like_id_list %}
-												<div class="active">
-													<a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}">
+										{% if not user.is_anonymous %}
+											<div class="product-action">
+												{% if product.id in like_id_list %}
+													<div class="active">
+														<a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}">
+															{{ product.likes.count }}
+															<i class="ti-heart"></i>
+															<span>Нравится</span>
+														</a>
+													</div>
+												{% else %}
+													<a href="{% url 'like' %}?product_id={{ product.id }}">
 														{{ product.likes.count }}
 														<i class="ti-heart"></i>
 														<span>Нравится</span>
 													</a>
-												</div>
-											{% else %}
-												<a href="{% url 'like' %}?product_id={{ product.id }}">
+												{% endif %}
+											</div>
+											<div class="product-action-2">
+												{% if product.id in select_id_list %}
+													<a href="{% url 'del_from_cart' %}?product_id={{ product.id }}">Убрать из избранного</a>
+												{% else %}
+													<a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
+												{% endif %}
+											</div>
+										{% else %}
+											<div class="product-action">
+												<a href="{% url 'login' %}">
 													{{ product.likes.count }}
 													<i class="ti-heart"></i>
 													<span>Нравится</span>
 												</a>
-											{% endif %}
-										</div>
-										<div class="product-action-2">
-											{% if product.id in select_id_list %}
-												<a href="{% url 'del_from_cart' %}?product_id={{ product.id }}">Убрать из избранного</a>
-											{% else %}
-												<a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
-											{% endif %}
-										</div>
+											</div>
+											<div class="product-action-2">
+												<a href="{% url 'login' %}">Добавить в избранное</a>
+											</div>
+										{% endif %}
 									</div>
 								</div>
 								<div class="product-content">
@@ -416,6 +442,7 @@
 									<img class="hover-img" src="/{{ product.main_photo }}" alt="#">
 								</a>
 								<div class="button-head">
+									{% if not user.is_anonymous %}
 									<div class="product-action">
 										{% if product.id in like_id_list %}
 											<div class="active">
@@ -440,6 +467,18 @@
 											<a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
 										{% endif %}
 									</div>
+									{% else %}
+										<div class="product-action">
+											<a href="{% url 'login' %}">
+												{{ product.likes.count }}
+												<i class="ti-heart"></i>
+												<span>Нравится</span>
+											</a>
+										</div>
+										<div class="product-action-2">
+											<a href="{% url 'login' %}">Добавить в избранное</a>
+										</div>
+									{% endif %}
 								</div>
 							</div>
 							<div class="product-content">
@@ -513,7 +552,7 @@
 								<ul>
 									<li>Я просто студент, не юр. лицо.</li>
 									<li>Адрес не дам. Пишите-звоните:</li>
-									<li>svet_tan@mail.ru</li>
+									<li>manufakture@bk.ru</li>
 									<li>8 902 257-71-69</li>
 								</ul>
 							</div>

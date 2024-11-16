@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractUser
@@ -35,13 +35,12 @@ class Salesman(models.Model):
     description = models.TextField()
     categories = models.ManyToManyField(Category, related_name='categories', blank=True)
     signup_date = models.DateTimeField(auto_now_add=True)
-    moderate = models.BooleanField(default=True)
+    moderate = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.first_name
 
 
-"""
 class Recommendations(models.Model):
     salesman = models.ForeignKey(Salesman,
                                  on_delete=models.CASCADE,
@@ -50,14 +49,12 @@ class Recommendations(models.Model):
                                           on_delete=models.CASCADE,
                                           related_name='recommendation',
                                           null=True)
-"""
 
-"""
+
 class Links(models.Model):
     link = models.URLField()
     label = models.CharField(max_length=50)
     person = models.ForeignKey(Salesman, on_delete=models.CASCADE)
-"""
 
 
 class Product(models.Model):
@@ -70,34 +67,29 @@ class Product(models.Model):
     likes = models.ManyToManyField(CustomUser, related_name='like', blank=True)
     select = models.ManyToManyField(CustomUser, related_name='select', blank=True)
     add_date = models.DateTimeField(auto_now_add=True)
-    moderate = models.BooleanField(default=True)
+    moderate = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
 
-"""
 class SalesmanScore(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField()
-"""
 
 
-"""
 class ProductScore(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField()
-"""
 
 
-"""
 class Review(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     text = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
-    moderate = models.BooleanField(default=True)
-"""
+    moderate = models.BooleanField(default=False)
+

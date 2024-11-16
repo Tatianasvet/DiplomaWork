@@ -197,6 +197,22 @@ Version:1.0
 	color:#fff;
 	background:#F7941D;
 }
+.btn-active {
+	position: relative;
+	font-weight: 500;
+	font-size:14px;
+	color: #fff;
+	background: #F7941D;
+	display: inline-block;
+	-webkit-transition: all 0.4s ease;
+	-moz-transition: all 0.4s ease;
+	transition: all 0.4s ease;
+	z-index: 5;
+	display: inline-block;
+	padding: 13px 16px;
+	border-radius: 0px;
+	text-transform:uppercase;
+}
 .del_btn {
 	position: relative;
 	font-weight: 500;
@@ -216,6 +232,9 @@ Version:1.0
 .del_btn:hover{
 	color:#fff;
 	background:#F7941D;
+}
+.page-navigation .btn{
+	padding: 13px 16px;
 }
 #scrollUp {
 	right: 10px;
@@ -4699,7 +4718,6 @@ Version:1.0
 }
 .contact-us .title h3 {
 	font-size: 25px;
-	text-transform: capitalize;
 	font-weight: 600;
 }
 .contact-us .single-head {

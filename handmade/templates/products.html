@@ -115,22 +115,27 @@
                     <div class="col-lg-12 col-md-12 col-12">
                         <div class="checkout-form">
                             <label><i class="ti-filter"></i></label>
+                            <input form="search" name="category_id" value="{{ category.id }}" hidden="hidden">
+                            <input form="search" name="search" value="{{ search_query }}" hidden="hidden">
+                            <input form="search" name="mode" value="product" hidden="hidden">
+                            <input form="search" name="min_price" value="{{ min_price }}" hidden="hidden">
+                            <input form="search" name="max_price" value="{{ max_price }}" hidden="hidden">
                             <input form="search" type="number" name="min_price" min="0" {% if min_price %} placeholder={{ min_price }} {% else %} placeholder="минимальная цена" {% endif %}>
                             <input form="search" type="number" name="max_price" min="0" {% if max_price %} placeholder={{ max_price }} {% else %} placeholder="максимальная цена" {% endif %}>
                             <button class="btn" form="search" type="submit">Применить</button>
                         </div>
                     </div>
-                        <div class="row">
-                            {% for products in priorities %}
-                                {% for product in products %}
-                                <div class="col-xl-3 col-lg-4 col-md-4 col-12">
-                                    <div class="single-product">
-                                        <div class="product-img">
-                                            <a href="{% url 'product_info' %}?product_id={{ product.id }}">
-                                                <img class="default-img" src="/{{ product.main_photo }}" alt="#">
-                                                <img class="hover-img" src="/{{ product.main_photo }}" alt="#">
-                                            </a>
-                                            <div class="button-head">
+                    <div class="row">
+                        {% for product in page %}
+                            <div class="col-xl-3 col-lg-4 col-md-4 col-12">
+                                <div class="single-product">
+                                    <div class="product-img">
+                                        <a href="{% url 'product_info' %}?product_id={{ product.id }}">
+                                            <img class="default-img" src="/{{ product.main_photo }}" alt="#">
+                                            <img class="hover-img" src="/{{ product.main_photo }}" alt="#">
+                                        </a>
+                                        <div class="button-head">
+                                            {% if not user.is_anonymous %}
                                                 <div class="product-action">
                                                     {% if product.id in like_id_list %}
                                                         <div class="active">
@@ -155,19 +160,29 @@
                                                         <a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
                                                     {% endif %}
                                                 </div>
-                                            </div>
+                                            {% else %}
+                                                <div class="product-action">
+                                                    <a href="{% url 'login' %}">
+                                                        {{ product.likes.count }}
+                                                        <i class="ti-heart"></i>
+                                                        <span>Нравится</span>
+                                                    </a>
+                                                </div>
+                                                <div class="product-action-2">
+                                                    <a href="{% url 'login' %}">Добавить в избранное</a>
+                                                </div>
+                                            {% endif %}
                                         </div>
-                                        <div class="product-content">
-                                            <h3><a href="{% url 'product_info' %}?product_id={{ product.id }}">{{ product.name }}</a></h3>
-                                            <div class="product-price">
-                                                <span>{{ product.price }} руб.</span>
-                                            </div>
+                                    </div>
+                                    <div class="product-content">
+                                        <h3><a href="{% url 'product_info' %}?product_id={{ product.id }}">{{ product.name }}</a></h3>
+                                        <div class="product-price">
+                                            <span>{{ product.price }} руб.</span>
                                         </div>
                                     </div>
                                 </div>
-                                {% endfor %}
-                            {% endfor %}
-                        </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -175,4 +190,52 @@
     </div>
 </div>
 <!-- End Product Area -->
+<!-- Start Page Navigation -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-title">
+                    <div class="page-navigation">
+                        <form {% if search_query %} method="post" {% endif %}>
+                            {% csrf_token %}
+                                <input name="category_id" value="{{ category.id }}" hidden="hidden">
+                                <input name="search" value="{{ search_query }}" hidden="hidden">
+                                <input name="mode" value="product" hidden="hidden">
+                                <input name="min_price" value="{{ min_price }}" hidden="hidden">
+                                <input name="max_price" value="{{ max_price }}" hidden="hidden">
+                                {% if has_previous %}
+                                    <button class="btn" name="page" value="{{ previous_page_number }}">
+                                        <i class="fa fa-angle-left"></i>—
+                                    </button>
+                                {% endif %}
+                                {% for page_num in page_range %}
+                                    {% if page_num > 0 %}
+                                        {% if page_num is current_page_number %}
+                                            <button class="btn-active" name="page" value="{{ page_num }}">
+                                                {{ page_num }}
+                                            </button>
+                                        {% else %}
+                                            <button class="btn" name="page" value="{{ page_num }}">
+                                                {{ page_num }}
+                                            </button>
+                                        {% endif %}
+                                    {% else %}
+                                    <i style="font-size: 40px">...</i>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if has_next %}
+                                    <button class="btn" name="page" value="{{ next_page_number }}">
+                                        —<i class="fa fa-angle-right"></i>
+                                    </button>
+                                {% endif %}
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ End Page Navigation -->
 {% endblock %}
