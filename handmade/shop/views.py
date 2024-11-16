@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q, Count
-from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, ChangeSalesmanInfoForm
+from django.core.mail import send_mail
+from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, ChangeSalesmanInfoForm, MailForm
 from .models import *
 
 
@@ -11,11 +12,12 @@ def start_page(request):
     context = {'user': request.user,
                'categories': categories,
                'parent_categories_id': _get_parent_categories_id(categories),
-               'select_id_list': _get_select_products_id_list(request.user),
-               'like_id_list': _get_like_products_id_list(request.user),
                'popular_products': _most_popular_products(limitation),
                'now_view_products': _now_view_products(limitation),
                'newest_products': _newest_products(limitation)}
+    if not request.user.is_anonymous:
+        context['select_id_list'] = _get_select_products_id_list(request.user)
+        context['like_id_list'] = _get_like_products_id_list(request.user)
     return render(request, 'index.html', context)
 
 
@@ -75,13 +77,16 @@ def search(request):
                        'min_price': request.POST.get('min_price'),
                        'max_price': request.POST.get('max_price'),
                        'search_response': f'По запросу \"{query}\" найдено {_result_count(clear_priorities)} товаров'}
+            if not request.user.is_anonymous:
+                context['select_id_list'] = _get_select_products_id_list(request.user)
+                context['like_id_list'] = _get_like_products_id_list(request.user)
             context['categories'] = categories = Category.objects.all()
             context['search_query'] = query
             context['parent_categories_id'] = _get_parent_categories_id(categories)
             return render(request, 'products.html', context)
         elif search_mode == 'salesman':
             user_lookup = Q(first_name__icontains=query) | Q(first_name__icontains=sub_query_1) | Q(first_name__icontains=sub_query_2)
-            users = User.objects.filter(user_lookup)
+            users = CustomUser.objects.filter(user_lookup)
             lookup1 = Q(user__in=users)
             lookup2 = Q(description__icontains=query) | Q(description__icontains=sub_query_1) | Q(description__icontains=sub_query_2)
             priorities = [Salesman.objects.filter(lookup1 & limitation),
@@ -187,11 +192,26 @@ def cart_page(request):
 
 
 def contact_page(request):
-    return render(request, 'contact.html')
+    context = {'success': False}
+    if request.method == 'POST':
+        form = MailForm(data=request.POST)
+        if form.is_valid():
+            name = request.POST.get('name')
+            back_email = request.POST.get('email')
+            message = request.POST.get('message') + f'\n\n-----\nС уважением, {name}\n{back_email}'
+            if send_mail(subject=request.POST.get('subject'),
+                         message=message,
+                         from_email='svet_tan@mail.ru',
+                         recipient_list=['manufakture@bk.ru']) == 1:
+                context['success'] = True
+                context['back_email'] = back_email
+        else:
+            context['error_message'] = form.errors
+    return render(request, 'contact.html', context)
 
 
 def reviews_page(request):
-    return render(request, 'reviews.html')
+    return render(request, 'dummy.html')
 
 
 def checkout_page(request):
@@ -201,8 +221,10 @@ def checkout_page(request):
 def products_page(request):
     category_id = request.GET.get('category_id')
     limitation = _get_search_limitations(request)
-    context = {'select_id_list': _get_select_products_id_list(request.user),
-               'like_id_list': _get_like_products_id_list(request.user)}
+    context = {}
+    if not request.user.is_anonymous:
+        context['select_id_list'] = _get_select_products_id_list(request.user)
+        context['like_id_list'] = _get_like_products_id_list(request.user)
     if request.method == 'POST':
         context['min_price'] = request.POST.get('min_price')
         context['max_price'] = request.POST.get('max_price')
@@ -319,9 +341,10 @@ def salesman_info_page(request):
     query = Q(salesman__exact=salesman)
     products = Product.objects.filter(query & limitation).order_by('-add_date')
     context = {'salesman': salesman,
-               'products': products,
-               'select_id_list': _get_select_products_id_list(request.user),
-               'like_id_list': _get_like_products_id_list(request.user)}
+               'products': products}
+    if not request.user.is_anonymous:
+        context['select_id_list'] = _get_select_products_id_list(request.user)
+        context['like_id_list'] = _get_like_products_id_list(request.user)
     return render(request, 'salesman_info.html', context)
 
 

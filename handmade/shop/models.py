@@ -41,7 +41,7 @@ class Salesman(models.Model):
         return self.user.first_name
 
 
-"""
+
 class Recommendations(models.Model):
     salesman = models.ForeignKey(Salesman,
                                  on_delete=models.CASCADE,
@@ -50,14 +50,12 @@ class Recommendations(models.Model):
                                           on_delete=models.CASCADE,
                                           related_name='recommendation',
                                           null=True)
-"""
 
-"""
+
 class Links(models.Model):
     link = models.URLField()
     label = models.CharField(max_length=50)
     person = models.ForeignKey(Salesman, on_delete=models.CASCADE)
-"""
 
 
 class Product(models.Model):
@@ -76,23 +74,18 @@ class Product(models.Model):
         return self.name
 
 
-"""
 class SalesmanScore(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField()
-"""
 
 
-"""
 class ProductScore(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField()
-"""
 
 
-"""
 class Review(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -100,4 +93,4 @@ class Review(models.Model):
     text = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     moderate = models.BooleanField(default=True)
-"""
+

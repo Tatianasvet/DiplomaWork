@@ -18,11 +18,6 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class SalesmanSignUpForm(forms.Form):
-    """
-    phone = forms.CharField(max_length=15, required=True)
-    photo = forms.ImageField(required=True)
-    description = forms.TextInput()
-    """
 
     class Meta:
         model = Salesman
@@ -35,13 +30,6 @@ class LoginForm(AuthenticationForm):
 
 
 class AddProductForm(forms.Form):
-    """
-    name = forms.CharField(max_length=200, required=True)
-    description = forms.TextInput()
-    categories = forms.SelectMultiple()
-    price = forms.IntegerField(min_value=1, required=True)
-    main_photo = forms.ImageField(required=True)
-    """
 
     class Meta:
         model = Product
@@ -56,3 +44,8 @@ class ChangeSalesmanInfoForm(forms.Form):
     email = forms.EmailField(max_length=254, required=False)
 
 
+class MailForm(forms.Form):
+    name = forms.CharField(max_length=200, required=True)
+    subject = forms.CharField(max_length=300, required=True)
+    email = forms.EmailField(required=True)
+    message = forms.TextInput()
