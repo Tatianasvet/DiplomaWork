@@ -35,11 +35,13 @@ class LoginForm(AuthenticationForm):
 
 
 class AddProductForm(forms.Form):
+    """
     name = forms.CharField(max_length=200, required=True)
     description = forms.TextInput()
     categories = forms.SelectMultiple()
     price = forms.IntegerField(min_value=1, required=True)
     main_photo = forms.ImageField(required=True)
+    """
 
     class Meta:
         model = Product

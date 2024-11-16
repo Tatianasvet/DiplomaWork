@@ -13,7 +13,9 @@ def start_page(request):
                'parent_categories_id': _get_parent_categories_id(categories),
                'select_id_list': _get_select_products_id_list(request.user),
                'like_id_list': _get_like_products_id_list(request.user),
-               'popular_products': _most_popular_products(limitation)}
+               'popular_products': _most_popular_products(limitation),
+               'now_view_products': _now_view_products(limitation),
+               'newest_products': _newest_products(limitation)}
     return render(request, 'index.html', context)
 
 
@@ -22,8 +24,13 @@ def _most_popular_products(limitation):
     return products[:8]
 
 
-def _last_selected_products(limitation):
-    products = Product.objects.filter(limitation).order_by('-select_time')
+def _now_view_products(limitation):
+    products = Product.objects.filter(limitation).annotate(select_count=Count('select')).order_by('-select_count', '-add_date')
+    return products[:8]
+
+
+def _newest_products(limitation):
+    products = Product.objects.filter(limitation).order_by('-add_date')
     return products[:8]
 
 
