@@ -6,7 +6,7 @@ from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, C
 from .models import *
 
 
-PRODUCT_PER_PAGE_COUNT = 4
+PRODUCT_PER_PAGE_COUNT = 8
 
 
 def start_page(request):
