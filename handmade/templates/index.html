@@ -114,8 +114,13 @@
 						<div class="search-bar-top">
 							<div class="search-bar">
 								<select name="mode" form="search">
-									<option class="active" value="product">товары</option>
-									<option value="salesman">мастера</option>
+									{% if mode == 'salesman' %}
+										<option class="active" value="salesman">мастера</option>
+										<option value="product">товары</option>
+									{% else %}
+										<option class="active" value="product">товары</option>
+										<option value="salesman">мастера</option>
+									{% endif %}
 								</select>
 								<form id="search" method="post" action="{% url 'search' %}{% if category %}?category_id={{ category.id }}{% endif %}">
 									{% csrf_token %}

@@ -114,15 +114,18 @@
                 <div class="product-info">
                     <div class="col-lg-12 col-md-12 col-12">
                         <div class="checkout-form">
-                            <label><i class="ti-filter"></i></label>
-                            <input form="search" name="category_id" value="{{ category.id }}" hidden="hidden">
-                            <input form="search" name="search" value="{{ search_query }}" hidden="hidden">
-                            <input form="search" name="mode" value="product" hidden="hidden">
-                            <input form="search" name="min_price" value="{{ min_price }}" hidden="hidden">
-                            <input form="search" name="max_price" value="{{ max_price }}" hidden="hidden">
-                            <input form="search" type="number" name="min_price" min="0" {% if min_price %} placeholder={{ min_price }} {% else %} placeholder="минимальная цена" {% endif %}>
-                            <input form="search" type="number" name="max_price" min="0" {% if max_price %} placeholder={{ max_price }} {% else %} placeholder="максимальная цена" {% endif %}>
-                            <button class="btn" form="search" type="submit">Применить</button>
+                            <form method="post">
+                                {% csrf_token %}
+                                <label><i class="ti-filter"></i></label>
+                                <input name="category_id" value="{{ category.id }}" hidden="hidden">
+                                <input name="search" value="{{ search_query }}" hidden="hidden">
+                                <input name="mode" value="product" hidden="hidden">
+                                <input name="min_price" value={{ min_price }} hidden="hidden">
+                                <input name="max_price" value={{ max_price }} hidden="hidden">
+                                <input type="number" name="change_min_price" min="0" {% if min_price %} placeholder="{{ min_price }}" {% else %} placeholder="минимальная цена" {% endif %}>
+                                <input type="number" name="change_max_price" min="0" {% if max_price %} placeholder="{{ max_price }}" {% else %} placeholder="максимальная цена" {% endif %}>
+                                <button class="btn" type="submit">Применить</button>
+                            </form>
                         </div>
                     </div>
                     <div class="row">
@@ -197,13 +200,13 @@
             <div class="col-12">
                 <div class="section-title">
                     <div class="page-navigation">
-                        <form {% if search_query %} method="post" {% endif %}>
+                        <form method="post">
                             {% csrf_token %}
                                 <input name="category_id" value="{{ category.id }}" hidden="hidden">
                                 <input name="search" value="{{ search_query }}" hidden="hidden">
                                 <input name="mode" value="product" hidden="hidden">
-                                <input name="min_price" value="{{ min_price }}" hidden="hidden">
-                                <input name="max_price" value="{{ max_price }}" hidden="hidden">
+                                <input name="min_price" value={{ min_price }} hidden="hidden">
+                                <input name="max_price" value={{ max_price }} hidden="hidden">
                                 {% if has_previous %}
                                     <button class="btn" name="page" value="{{ previous_page_number }}">
                                         <i class="fa fa-angle-left"></i>—

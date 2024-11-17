@@ -6,7 +6,7 @@ from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, C
 from .models import *
 
 
-PRODUCT_PER_PAGE_COUNT = 12
+PRODUCT_PER_PAGE_COUNT = 4
 
 
 def start_page(request):
@@ -74,7 +74,8 @@ def search(request):
             for lookup in [lookup1, lookup2, lookup3, lookup4, lookup5]:
                 priorities.append(Product.objects.filter(lookup & limitation).order_by('-add_date'))
             # контекст
-            context = {'category': False,
+            context = {'mode': search_mode,
+                       'category': False,
                        'min_price': request.POST.get('min_price'),
                        'max_price': request.POST.get('max_price')}
             context = _get_page_products(request, priorities, context)
@@ -92,11 +93,12 @@ def search(request):
             lookup2 = Q(description__icontains=query) | Q(description__icontains=sub_query_1) | Q(description__icontains=sub_query_2)
             priorities = [Salesman.objects.filter(lookup1 & limitation),
                           Salesman.objects.filter(lookup2 & limitation)]
-            context = {'search_query': query}
+            context = {'mode': search_mode,
+                       'search_query': query}
             context = _get_page_products(request, priorities, context)
             return render(request, 'salesmans.html', context)
     else:
-        return redirect('products')
+        return products_page(request)
 
 
 def _get_page_products(request, priorities, context):
@@ -116,10 +118,31 @@ def _get_page_products(request, priorities, context):
     if request.method == 'POST':
         search_mode = request.POST.get('mode')
         query = request.POST.get('search')
-        if search_mode == 'product':
+        new_min_price = request.POST.get('change_min_price')
+        if new_min_price:
+            context['min_price'] = new_min_price
+        else:
+            context['min_price'] = request.POST.get('min_price')
+        new_max_price = request.POST.get('change_max_price')
+        if new_max_price:
+            context['max_price'] = new_max_price
+        else:
+            context['max_price'] = request.POST.get('max_price')
+        if search_mode == 'product' and query != '':
             context['search_response'] = f'По запросу \"{query}\" найдено {len(objects)} товаров'
-        elif search_mode == 'salesman':
+        elif search_mode == 'salesman' and query != '':
             context['search_response'] = f'По запросу \"{query}\" найдено {len(objects)} мастеров'
+    if request.method == 'GET':
+        new_min_price = request.GET.get('change_min_price')
+        if new_min_price:
+            context['min_price'] = new_min_price
+        else:
+            context['min_price'] = request.GET.get('min_price')
+        new_max_price = request.GET.get('change_max_price')
+        if new_max_price:
+            context['max_price'] = new_max_price
+        else:
+            context['max_price'] = request.GET.get('max_price')
     return context
 
 
@@ -148,11 +171,17 @@ def _page_number(request):
 def _get_search_limitations(request):
     limitation = Q(moderate__exact=True)
     if request.method == 'POST':
+        new_min_price = request.POST.get('change_min_price')
+        new_max_price = request.POST.get('change_max_price')
         min_price = request.POST.get('min_price')
         max_price = request.POST.get('max_price')
-        if min_price:
+        if new_min_price and new_min_price != 'None' and new_min_price != '':
+            limitation = limitation & Q(price__gte=int(new_min_price))
+        elif min_price and min_price != 'None' and min_price != '':
             limitation = limitation & Q(price__gte=int(min_price))
-        if max_price:
+        if new_max_price and new_max_price != 'None' and new_max_price != '':
+            limitation = limitation & Q(price__lte=int(new_max_price))
+        elif max_price and max_price != 'None' and max_price != '':
             limitation = limitation & Q(price__lte=int(max_price))
     return limitation
 
@@ -211,6 +240,8 @@ def do_logout(request):
 
 
 def cart_page(request):
+    if request.user.is_anonymous:
+        return redirect('login')
     products = Product.objects.filter(select=request.user)
     context = {'products': products}
     return render(request, 'cart.html', context)
@@ -250,9 +281,6 @@ def products_page(request):
     if not request.user.is_anonymous:
         context['select_id_list'] = _get_select_products_id_list(request.user)
         context['like_id_list'] = _get_like_products_id_list(request.user)
-    if request.method == 'POST':
-        context['min_price'] = request.POST.get('min_price')
-        context['max_price'] = request.POST.get('max_price')
     if category_id:
         context['category'] = category = Category.objects.get(id=category_id)
         context['way'] = _category_way(category_id)
@@ -354,7 +382,8 @@ def product_info(request):
 def salesmans_page(request):
     limitation = Q(moderate__exact=True)
     priorities = [Salesman.objects.filter(limitation),]
-    context = _get_page_products(request, priorities, {})
+    context = {'mode': 'salesman'}
+    context = _get_page_products(request, priorities, context)
     return render(request, 'salesmans.html', context)
 
 
