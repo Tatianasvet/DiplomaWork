@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q, Count
-from django.core.mail import send_mail
-from .forms import AddProductForm, MailForm
+from .forms import AddProductForm
 from .models import *
 
 
@@ -185,90 +184,12 @@ def _get_search_limitations(request):
     return limitation
 
 
-"""
-def signup_page(request):
-    context = {}
-    if request.method == 'POST':
-        if request.GET.get('salesman') == 'true':
-            user_form = SignUpForm(request.POST)
-            salesman_form = SalesmanSignUpForm(request.POST, request.FILES)
-            if user_form.is_valid():
-                if salesman_form.is_valid():
-                    user = user_form.save()
-                    login(request, user)
-                    Salesman.objects.create(user=user,
-                                            phone=request.POST.get('phone'),
-                                            photo=request.FILES['photo'],
-                                            description=request.POST.get('description'))
-                    return redirect('home')
-                else:
-                    context['error_message'] = salesman_form.errors
-            else:
-                context['error_message'] = user_form.errors
-        else:
-            form = SignUpForm(request.POST)
-            if form.is_valid():
-                user = form.save()
-                login(request, user)
-                return redirect('home')
-            else:
-                context['error_message'] = form.errors
-    return render(request, 'signup.html', context)
-"""
-
-
-"""
-def login_page(request):
-    form = LoginForm(data=request.POST or None)
-    context = {}
-    if request.method == 'POST':
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-            else:
-                context['error_message'] = form.errors
-        else:
-            context['error_message'] = form.errors
-    return render(request, 'login.html', context)
-"""
-
-
-"""
-def do_logout(request):
-    logout(request)
-    return redirect('home')
-"""
-
-
 def cart_page(request):
     if request.user.is_anonymous:
         return redirect('login')
     products = Product.objects.filter(select=request.user)
     context = {'products': products}
     return render(request, 'cart.html', context)
-
-
-def contact_page(request):
-    context = {'success': False}
-    if request.method == 'POST':
-        form = MailForm(data=request.POST)
-        if form.is_valid():
-            name = request.POST.get('name')
-            back_email = request.POST.get('email')
-            message = request.POST.get('message') + f'\n\n-----\nС уважением, {name}\n{back_email}'
-            if send_mail(subject=request.POST.get('subject'),
-                         message=message,
-                         from_email='svet_tan@mail.ru',
-                         recipient_list=['manufakture@bk.ru']) == 1:
-                context['success'] = True
-                context['back_email'] = back_email
-        else:
-            context['error_message'] = form.errors
-    return render(request, 'contact.html', context)
 
 
 def reviews_page(request):
@@ -444,36 +365,6 @@ def product_add_form(request):
     return render(request, 'product_add_form.html', context)
 
 
-"""
-def change_personal_info(request):
-    salesman = Salesman.objects.get(user=request.user)
-    context = {'salesman': salesman}
-    if request.method == 'POST':
-        form = ChangeSalesmanInfoForm(request.POST)
-        if form.is_valid():
-            first_name = request.POST.get('first_name')
-            if first_name:
-                salesman.user.first_name = first_name
-            if 'photo' not in request.POST.keys():
-                salesman.photo = request.FILES['photo']
-            description = request.POST.get('description')
-            if description:
-                salesman.description = description
-            phone = request.POST.get('phone')
-            if phone:
-                salesman.phone = phone
-            email = request.POST.get('email')
-            if email:
-                salesman.user.email = email
-            salesman.user.save()
-            salesman.save()
-            return redirect('account')
-        else:
-            context['error_message'] = form.errors
-    return render(request, 'change_personal_info.html', context)
-"""
-
-
 def delite_consent_page(request):
     object_type = request.GET.get('object_type')
     target_id = request.GET.get('target_id')
@@ -496,20 +387,3 @@ def delite_consent_page(request):
                 product.delete()
             return redirect('account')
     return render(request, 'consent_page.html', context)
-
-
-def about_page(request):
-    return render(request, 'about.html')
-
-
-def faq_page(request):
-    return render(request, 'dummy.html')
-
-
-def conditions_page(request):
-    return render(request, 'dummy.html')
-
-
-def payment_page(request):
-    return render(request, 'dummy.html')
-

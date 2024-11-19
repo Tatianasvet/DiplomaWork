@@ -2,17 +2,6 @@ from django.contrib import admin
 from .models import *
 
 
-"""
-class CustomUserAdmin(UserAdmin):
-    add_form = SignUpForm
-    form = CustomUserChangeForm
-    model = CustomUser
-    list_display = ["username", "email", "first_name", "is_staff", "is_superuser"]
-
-admin.site.register(CustomUser, CustomUserAdmin)
-"""
-
-
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ["name", "parent_category_id", "product_count"]

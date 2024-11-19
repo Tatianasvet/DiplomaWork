@@ -18,14 +18,20 @@ from django.contrib import admin
 from django.urls import path
 from shop.views import *
 from registration.views import Signup, Login, Change
+from info.views import Info, Contact
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', start_page, name='home'),
     path('search/', search, name='search'),
-    path('about/', about_page, name='about'),
+    # info
+    path('about/', Info().about_page, name='about'),
+    path('faq/', Info().faq_page, name='faq'),
+    path('conditions/', Info().conditions_page, name='conditions'),
+    path('payment/', Info().payment_page, name='payment'),
+    path('contact/', Contact().contact_page, name='contact'),
+
     path('cart/', cart_page, name='cart'),
-    path('contact/', contact_page, name='contact'),
     path('reviews/', reviews_page, name='reviews'),
     # registration
     path('signup/', Signup().signup_page, name='signup'),
@@ -44,7 +50,4 @@ urlpatterns = [
     path('account/', account_page, name='account'),
     path('product_add_form/', product_add_form, name='product_add_form'),
     path('delite_consent/', delite_consent_page, name='delite_consent'),
-    path('faq/', faq_page, name='faq'),
-    path('conditions/', conditions_page, name='conditions'),
-    path('payment/', payment_page, name='payment'),
 ]

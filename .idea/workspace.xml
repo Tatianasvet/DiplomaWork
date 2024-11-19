@@ -4,15 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="End">
-      <change afterPath="$PROJECT_DIR$/handmade/registration/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handmade/registration/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handmade/registration/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handmade/registration/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handmade/registration/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handmade/registration/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handmade/registration/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handmade/registration/views.py" afterDir="false" />
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="Login app">
+      <change afterPath="$PROJECT_DIR$/handmade/info/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/info/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/info/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/info/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/info/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/info/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/info/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/info/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/handmade/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/settings.py" afterDir="false" />
@@ -20,9 +20,8 @@
       <change beforePath="$PROJECT_DIR$/handmade/shop/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/shop/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/change_personal_info.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/registration/change_personal_info.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/registration/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/registration/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/info/about.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/info/contact.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +58,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\info" />
       <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\registration" />
     </key>
   </component>
@@ -350,7 +350,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731862638080</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Login app">
+      <option name="closed" value="true" />
+      <created>1732018065210</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1732018065210</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -365,7 +373,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add review" />
     <MESSAGE value="Category tree" />
     <MESSAGE value="main menu" />
     <MESSAGE value="Product page" />
@@ -390,6 +397,7 @@
     <MESSAGE value="Pagination" />
     <MESSAGE value="Filter 2.0" />
     <MESSAGE value="End" />
-    <option name="LAST_COMMIT_MESSAGE" value="End" />
+    <MESSAGE value="Login app" />
+    <option name="LAST_COMMIT_MESSAGE" value="Login app" />
   </component>
 </project>
