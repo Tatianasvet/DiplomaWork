@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'cart',
     'info',
+    'products',
     'registration',
     'review',
+    'salesman',
+    'search',
     'shop',
 ]
 
@@ -64,8 +67,11 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates',
                  BASE_DIR / 'templates/cart',
                  BASE_DIR / 'templates/info',
+                 BASE_DIR / 'templates/products',
                  BASE_DIR / 'templates/registration',
-                 BASE_DIR / 'templates/review'],
+                 BASE_DIR / 'templates/review',
+                 BASE_DIR / 'templates/salesman',
+                 BASE_DIR / 'templates/search'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

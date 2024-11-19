@@ -57,6 +57,12 @@ class Links(models.Model):
     person = models.ForeignKey(Salesman, on_delete=models.CASCADE)
 
 
+class SalesmanScore(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
+    score = models.PositiveSmallIntegerField()
+
+
 class Product(models.Model):
     salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
@@ -71,12 +77,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class SalesmanScore(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    salesman = models.ForeignKey(Salesman, on_delete=models.CASCADE)
-    score = models.PositiveSmallIntegerField()
 
 
 class ProductScore(models.Model):

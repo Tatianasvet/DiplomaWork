@@ -184,16 +184,6 @@ def _get_search_limitations(request):
     return limitation
 
 
-"""
-def cart_page(request):
-    if request.user.is_anonymous:
-        return redirect('login')
-    products = Product.objects.filter(select=request.user)
-    context = {'products': products}
-    return render(request, 'cart.html', context)
-"""
-
-
 def checkout_page(request):
     return render(request, 'checkout.html')
 
@@ -289,17 +279,6 @@ def salesman_info_page(request):
         context['select_id_list'] = _get_select_products_id_list(request.user)
         context['like_id_list'] = _get_like_products_id_list(request.user)
     return render(request, 'salesman_info.html', context)
-
-
-def account_page(request):
-    if request.user.first_name:
-        salesman = Salesman.objects.get(user=request.user)
-        products = Product.objects.filter(salesman=salesman).order_by('-add_date')
-        context = {'salesman': salesman,
-                   'products': products}
-        return render(request, 'account.html', context)
-    else:
-        return redirect('cart')
 
 
 def product_add_form(request):
