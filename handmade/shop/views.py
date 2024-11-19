@@ -192,10 +192,6 @@ def cart_page(request):
     return render(request, 'cart.html', context)
 
 
-def reviews_page(request):
-    return render(request, 'dummy.html')
-
-
 def checkout_page(request):
     return render(request, 'checkout.html')
 

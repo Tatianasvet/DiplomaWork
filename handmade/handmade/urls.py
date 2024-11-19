@@ -19,6 +19,7 @@ from django.urls import path
 from shop.views import *
 from registration.views import Signup, Login, Change
 from info.views import Info, Contact
+from review.views import Review
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,7 +33,6 @@ urlpatterns = [
     path('contact/', Contact().contact_page, name='contact'),
 
     path('cart/', cart_page, name='cart'),
-    path('reviews/', reviews_page, name='reviews'),
     # registration
     path('signup/', Signup().signup_page, name='signup'),
     path('login/', Login().log_in_page, name='login'),
@@ -50,4 +50,6 @@ urlpatterns = [
     path('account/', account_page, name='account'),
     path('product_add_form/', product_add_form, name='product_add_form'),
     path('delite_consent/', delite_consent_page, name='delite_consent'),
+    # review
+    path('reviews/', Review().reviews_page, name='reviews'),
 ]
