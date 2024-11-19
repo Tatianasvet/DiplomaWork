@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q, Count
 from django.core.mail import send_mail
-from .forms import SignUpForm, SalesmanSignUpForm,  LoginForm, AddProductForm, ChangeSalesmanInfoForm, MailForm
+from .forms import AddProductForm, MailForm
 from .models import *
 
 
@@ -186,6 +185,7 @@ def _get_search_limitations(request):
     return limitation
 
 
+"""
 def signup_page(request):
     context = {}
     if request.method == 'POST':
@@ -214,8 +214,10 @@ def signup_page(request):
             else:
                 context['error_message'] = form.errors
     return render(request, 'signup.html', context)
+"""
 
 
+"""
 def login_page(request):
     form = LoginForm(data=request.POST or None)
     context = {}
@@ -232,11 +234,14 @@ def login_page(request):
         else:
             context['error_message'] = form.errors
     return render(request, 'login.html', context)
+"""
 
 
+"""
 def do_logout(request):
     logout(request)
     return redirect('home')
+"""
 
 
 def cart_page(request):
@@ -439,6 +444,7 @@ def product_add_form(request):
     return render(request, 'product_add_form.html', context)
 
 
+"""
 def change_personal_info(request):
     salesman = Salesman.objects.get(user=request.user)
     context = {'salesman': salesman}
@@ -465,6 +471,7 @@ def change_personal_info(request):
         else:
             context['error_message'] = form.errors
     return render(request, 'change_personal_info.html', context)
+"""
 
 
 def delite_consent_page(request):

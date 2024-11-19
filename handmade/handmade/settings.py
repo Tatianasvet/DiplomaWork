@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'phonenumber_field',
+    'registration',
     'shop',
 ]
 
@@ -57,7 +58,8 @@ ROOT_URLCONF = 'handmade.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates',
+                 BASE_DIR / 'templates/registration'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

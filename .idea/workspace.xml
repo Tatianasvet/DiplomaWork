@@ -4,9 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="Filter 2.0">
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="End">
+      <change afterPath="$PROJECT_DIR$/handmade/registration/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/registration/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/registration/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/registration/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/registration/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/registration/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/registration/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handmade/registration/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/handmade/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/handmade/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/change_personal_info.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/registration/change_personal_info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/registration/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/registration/signup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +32,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -33,14 +49,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\registration" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -321,7 +342,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731855857278</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="End">
+      <option name="closed" value="true" />
+      <created>1731862638080</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1731862638080</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -336,7 +365,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="models" />
     <MESSAGE value="add review" />
     <MESSAGE value="Category tree" />
     <MESSAGE value="main menu" />
@@ -361,6 +389,7 @@
     <MESSAGE value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;handmade/db.sqlite3&#10;#&#9;handmade/shop/models.py&#10;#&#9;handmade/shop/views.py" />
     <MESSAGE value="Pagination" />
     <MESSAGE value="Filter 2.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="Filter 2.0" />
+    <MESSAGE value="End" />
+    <option name="LAST_COMMIT_MESSAGE" value="End" />
   </component>
 </project>

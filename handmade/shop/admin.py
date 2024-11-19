@@ -1,9 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .forms import SignUpForm, CustomUserChangeForm
 from .models import *
 
 
+"""
 class CustomUserAdmin(UserAdmin):
     add_form = SignUpForm
     form = CustomUserChangeForm
@@ -11,6 +10,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ["username", "email", "first_name", "is_staff", "is_superuser"]
 
 admin.site.register(CustomUser, CustomUserAdmin)
+"""
 
 
 @admin.register(Category)
@@ -42,9 +42,3 @@ class ProductAdmin(admin.ModelAdmin):
 
     def likes_count(self, obj):
         return obj.likes.count()
-
-#admin.site.register(Recommendations)
-#admin.site.register(Links)
-#admin.site.register(SalesmanScore)
-#admin.site.register(ProductScore)
-#admin.site.register(Review)
