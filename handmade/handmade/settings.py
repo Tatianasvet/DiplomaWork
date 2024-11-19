@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'phonenumber_field',
+    'cart',
     'info',
     'registration',
     'review',
@@ -61,8 +62,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates',
+                 BASE_DIR / 'templates/cart',
+                 BASE_DIR / 'templates/info',
                  BASE_DIR / 'templates/registration',
-                 BASE_DIR / 'templates/info'],
+                 BASE_DIR / 'templates/review'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

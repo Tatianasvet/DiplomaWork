@@ -20,36 +20,38 @@ from shop.views import *
 from registration.views import Signup, Login, Change
 from info.views import Info, Contact
 from review.views import Review
+from cart.views import Cart, Select, Like
 
 urlpatterns = [
+    # admin
     path('admin/', admin.site.urls),
-    path('', start_page, name='home'),
-    path('search/', search, name='search'),
     # info
     path('about/', Info().about_page, name='about'),
     path('faq/', Info().faq_page, name='faq'),
     path('conditions/', Info().conditions_page, name='conditions'),
     path('payment/', Info().payment_page, name='payment'),
     path('contact/', Contact().contact_page, name='contact'),
-
-    path('cart/', cart_page, name='cart'),
     # registration
     path('signup/', Signup().signup_page, name='signup'),
     path('login/', Login().log_in_page, name='login'),
     path('logout', Login().log_out, name='logout'),
     path('change_personal_info/', Change().change_salesman_info, name='change_personal_info'),
+    # review
+    path('reviews/', Review().reviews_page, name='reviews'),
+    # cart
+    path('cart/', Cart().cart_page, name='cart'),
+    path('add_to_cart/', Select().add_to_cart, name='add_to_cart'),
+    path('del_from_cart/', Select().del_from_cart, name='del_from_cart'),
+    path('like/', Like().like, name='like'),
+    path('dislike', Like().dislike, name='dislike'),
 
+    path('', start_page, name='home'),
+    path('search/', search, name='search'),
     path('products/', products_page, name='products'),
-    path('add_to_cart/', add_to_cart, name='add_to_cart'),
-    path('del_from_cart/', del_from_cart, name='del_from_cart'),
-    path('like/', like, name='like'),
-    path('dislike', dislike, name='dislike'),
     path('product_info/', product_info, name='product_info'),
     path('salesmans/', salesmans_page, name='salesmans'),
     path('salesman_info/', salesman_info_page, name='salesman_info'),
     path('account/', account_page, name='account'),
     path('product_add_form/', product_add_form, name='product_add_form'),
     path('delite_consent/', delite_consent_page, name='delite_consent'),
-    # review
-    path('reviews/', Review().reviews_page, name='reviews'),
 ]

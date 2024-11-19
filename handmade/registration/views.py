@@ -43,7 +43,7 @@ class Signup(Context):
                                         phone=self.request.POST.get('phone'),
                                         photo=self.request.FILES['photo'],
                                         description=self.request.POST.get('description'))
-                return redirect('home')
+                self.success = True
             else:
                 self.context['error_message'] = salesman_form.errors
         else:

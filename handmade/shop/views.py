@@ -184,12 +184,14 @@ def _get_search_limitations(request):
     return limitation
 
 
+"""
 def cart_page(request):
     if request.user.is_anonymous:
         return redirect('login')
     products = Product.objects.filter(select=request.user)
     context = {'products': products}
     return render(request, 'cart.html', context)
+"""
 
 
 def checkout_page(request):
@@ -257,40 +259,6 @@ def _category_way(category_id):
         way.append(category)
     way.reverse()
     return way
-
-
-def add_to_cart(request):
-    user = request.user
-    product_id = request.GET.get('product_id')
-    product = Product.objects.get(id=product_id)
-    product.select.add(user)
-    product.save()
-    return redirect(request.META['HTTP_REFERER'])
-
-
-def del_from_cart(request):
-    user = request.user
-    product_id = request.GET.get('product_id')
-    product = Product.objects.get(id=product_id)
-    product.select.remove(user)
-    return redirect(request.META['HTTP_REFERER'])
-
-
-def like(request):
-    user = request.user
-    product_id = request.GET.get('product_id')
-    product = Product.objects.get(id=product_id)
-    product.likes.add(user)
-    product.save()
-    return redirect(request.META['HTTP_REFERER'])
-
-
-def dislike(request):
-    user = request.user
-    product_id = request.GET.get('product_id')
-    product = Product.objects.get(id=product_id)
-    product.likes.remove(user)
-    return redirect(request.META['HTTP_REFERER'])
 
 
 def product_info(request):
