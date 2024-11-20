@@ -7,34 +7,70 @@ from .models import *
 PRODUCT_PER_PAGE_COUNT = 8
 
 
-def start_page(request):
+class Context:
+    context = {}
+    request = None
+
+
+class AbstractCategories:
+    def _all_categories(self):
+        return Category.objects.all().order_by('name')
+
+    def _get_parent_categories_id(self, categories):
+        parent_categories_id = []
+        for check_category in categories:
+            for category in categories:
+                if check_category.id == category.parent_category_id:
+                    parent_categories_id.append(check_category.id)
+                    break
+        return parent_categories_id
+
+
+class AbstractCart:
+    def _get_select_products_id_list(self, user):
+        select_products = Product.objects.filter(select=user)
+        id_list = []
+        for product in select_products:
+            id_list.append(product.id)
+        return id_list
+
+    def _get_like_products_id_list(self, user):
+        like_products = Product.objects.filter(likes=user)
+        id_list = []
+        for product in like_products:
+            id_list.append(product.id)
+        return id_list
+
+
+class Home(Context, AbstractCategories, AbstractCart):
     limitation = Q(moderate__exact=True)
-    categories = Category.objects.all()
-    context = {'user': request.user,
-               'categories': categories,
-               'parent_categories_id': _get_parent_categories_id(categories),
-               'popular_products': _most_popular_products(limitation),
-               'now_view_products': _now_view_products(limitation),
-               'newest_products': _newest_products(limitation)}
-    if not request.user.is_anonymous:
-        context['select_id_list'] = _get_select_products_id_list(request.user)
-        context['like_id_list'] = _get_like_products_id_list(request.user)
-    return render(request, 'index.html', context)
+    categories = None
 
+    def start_page(self, request):
+        self.request = request
+        self.categories = self._all_categories()
+        self.context['user'] = self.request.user
+        self.context['categories'] = self.categories
+        self.context['parent_categories_id'] = self._get_parent_categories_id(self.categories)
+        self.context['popular_products'] = self.__most_popular_products()
+        self.context['now_view_products'] = self.__now_view_products()
+        self.context['newest_products'] = self.__newest_products()
+        if not self.request.user.is_anonymous:
+            self.context['select_id_list'] = self._get_select_products_id_list(self.request.user)
+            self.context['like_id_list'] = self._get_like_products_id_list(self.request.user)
+        return render(request, 'index.html', self.context)
 
-def _most_popular_products(limitation):
-    products = Product.objects.filter(limitation).annotate(like_count=Count('likes')).order_by('-like_count', '-add_date')
-    return products[:8]
+    def __most_popular_products(self):
+        products = Product.objects.filter(self.limitation).annotate(like_count=Count('likes')).order_by('-like_count', '-add_date')
+        return products[:8]
 
+    def __now_view_products(self):
+        products = Product.objects.filter(self.limitation).annotate(select_count=Count('select')).order_by('-select_count', '-add_date')
+        return products[:8]
 
-def _now_view_products(limitation):
-    products = Product.objects.filter(limitation).annotate(select_count=Count('select')).order_by('-select_count', '-add_date')
-    return products[:8]
-
-
-def _newest_products(limitation):
-    products = Product.objects.filter(limitation).order_by('-add_date')
-    return products[:8]
+    def __newest_products(self):
+        products = Product.objects.filter(self.limitation).order_by('-add_date')
+        return products[:8]
 
 
 def _get_parent_categories_id(categories):

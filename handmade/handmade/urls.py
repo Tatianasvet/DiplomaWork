@@ -22,6 +22,7 @@ from info.views import Info, Contact
 from review.views import Review
 from cart.views import Cart, Select, Like
 from salesman.views import Profile
+from shop.views import Home
 
 urlpatterns = [
     # admin
@@ -47,8 +48,10 @@ urlpatterns = [
     path('dislike', Like().dislike, name='dislike'),
     # salesman
     path('account/', Profile().account_page, name='account'),
+    # shop
+    path('', Home().start_page, name='home'),
 
-    path('', start_page, name='home'),
+
     path('search/', search, name='search'),
     path('products/', products_page, name='products'),
     path('product_info/', product_info, name='product_info'),
