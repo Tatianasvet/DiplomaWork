@@ -42,7 +42,72 @@ class AbstractCart:
         return id_list
 
 
-class Home(Context, AbstractCategories, AbstractCart):
+class AbstractPaginator:
+    def _get_page_products(self, request, priorities, context):
+        page_number = _page_number(request)
+        objects = _delete_duplicates(priorities)
+        p = Paginator(objects, PRODUCT_PER_PAGE_COUNT)
+        page = p.page(page_number)
+        context['page'] = page
+        context['current_page_number'] = page_number
+        context['has_previous'] = page.has_previous()
+        if page.has_previous():
+            context['previous_page_number'] = page.previous_page_number()
+        context['has_next'] = page.has_next()
+        if page.has_next():
+            context['next_page_number'] = page.next_page_number()
+        context['page_range'] = p.get_elided_page_range(number=page_number, on_each_side=2, on_ends=1)
+        if request.method == 'POST':
+            search_mode = request.POST.get('mode')
+            query = request.POST.get('search')
+            new_min_price = request.POST.get('change_min_price')
+            if new_min_price:
+                context['min_price'] = new_min_price
+            else:
+                context['min_price'] = request.POST.get('min_price')
+            new_max_price = request.POST.get('change_max_price')
+            if new_max_price:
+                context['max_price'] = new_max_price
+            else:
+                context['max_price'] = request.POST.get('max_price')
+            if search_mode == 'product' and query != '':
+                context['search_response'] = f'По запросу \"{query}\" найдено {len(objects)} товаров'
+            elif search_mode == 'salesman' and query != '':
+                context['search_response'] = f'По запросу \"{query}\" найдено {len(objects)} мастеров'
+        if request.method == 'GET':
+            new_min_price = request.GET.get('change_min_price')
+            if new_min_price:
+                context['min_price'] = new_min_price
+            else:
+                context['min_price'] = request.GET.get('min_price')
+            new_max_price = request.GET.get('change_max_price')
+            if new_max_price:
+                context['max_price'] = new_max_price
+            else:
+                context['max_price'] = request.GET.get('max_price')
+        return context
+
+
+class AbstractSearch:
+    def _get_search_limitations(self, request):
+        limitation = Q(moderate__exact=True)
+        if request.method == 'POST':
+            new_min_price = request.POST.get('change_min_price')
+            new_max_price = request.POST.get('change_max_price')
+            min_price = request.POST.get('min_price')
+            max_price = request.POST.get('max_price')
+            if new_min_price and new_min_price != 'None' and new_min_price != '':
+                limitation = limitation & Q(price__gte=int(new_min_price))
+            elif min_price and min_price != 'None' and min_price != '':
+                limitation = limitation & Q(price__gte=int(min_price))
+            if new_max_price and new_max_price != 'None' and new_max_price != '':
+                limitation = limitation & Q(price__lte=int(new_max_price))
+            elif max_price and max_price != 'None' and max_price != '':
+                limitation = limitation & Q(price__lte=int(max_price))
+        return limitation
+
+
+class Home(Context, AbstractCategories, AbstractCart, AbstractPaginator):
     limitation = Q(moderate__exact=True)
     categories = None
 
@@ -83,56 +148,91 @@ def _get_parent_categories_id(categories):
     return parent_categories_id
 
 
-def search(request):
-    if request.method == 'POST':
-        search_mode = request.POST.get('mode')
-        limitation = _get_search_limitations(request)
-        query = request.POST.get('search')
-        if query == '':
-            return products_page(request)
-        sub_query_1 = query.lower()
-        sub_query_2 = query.upper()
-        if len(query) > 3:
-            sub_query_2 = query[1:]
-        if search_mode == 'product':
-            # Приоритеты поиска
-            lookup1 = Q(name=query)
-            lookup2 = Q(name__icontains=query) | Q(name__icontains=sub_query_1) | Q(name__icontains=sub_query_2)
-            lookup3 = Q(description__icontains=query) | Q(description__icontains=sub_query_1) | Q(description__icontains=sub_query_2)
-            query_categories_1 = Category.objects.filter(lookup2)
-            lookup4 = Q(category__in=query_categories_1)
-            query_categories_2 = Category.objects.filter(lookup3)
-            lookup5 = Q(category__in=query_categories_2)
-            # поиск в базе данных
-            priorities = []
-            for lookup in [lookup1, lookup2, lookup3, lookup4, lookup5]:
-                priorities.append(Product.objects.filter(lookup & limitation).order_by('-add_date'))
-            # контекст
-            context = {'mode': search_mode,
-                       'category': False,
-                       'min_price': request.POST.get('min_price'),
-                       'max_price': request.POST.get('max_price')}
-            context = _get_page_products(request, priorities, context)
-            if not request.user.is_anonymous:
-                context['select_id_list'] = _get_select_products_id_list(request.user)
-                context['like_id_list'] = _get_like_products_id_list(request.user)
-            context['categories'] = categories = Category.objects.all()
-            context['search_query'] = query
-            context['parent_categories_id'] = _get_parent_categories_id(categories)
-            return render(request, 'products.html', context)
-        elif search_mode == 'salesman':
-            user_lookup = Q(first_name__icontains=query) | Q(first_name__icontains=sub_query_1) | Q(first_name__icontains=sub_query_2)
-            users = CustomUser.objects.filter(user_lookup)
-            lookup1 = Q(user__in=users)
-            lookup2 = Q(description__icontains=query) | Q(description__icontains=sub_query_1) | Q(description__icontains=sub_query_2)
-            priorities = [Salesman.objects.filter(lookup1 & limitation),
-                          Salesman.objects.filter(lookup2 & limitation)]
-            context = {'mode': search_mode,
-                       'search_query': query}
-            context = _get_page_products(request, priorities, context)
-            return render(request, 'salesmans.html', context)
-    else:
-        return products_page(request)
+class Search(Context, AbstractSearch, AbstractCart, AbstractCategories, AbstractPaginator):
+    limitation = Q(moderate__exact=True)
+    lookup_list = []
+    query, sub_query_1, sub_query_2 = None, None, None
+
+    def search(self, request):
+        self.request = request
+        if self.request.method == 'POST':
+            search_mode = self.request.POST.get('mode')
+            self.context['mode'] = search_mode
+            self.limitation = self._get_search_limitations(self.request)
+            self.__create_queries()
+            if self.query == '':
+                return products_page(self.request)     # !!!!!!!!!!!!!!!!!!!!!
+            if search_mode == 'product':
+                self.__product_search()
+                return render(self.request, 'products.html', self.context)
+            elif search_mode == 'salesman':
+
+                return render(self.request, 'salesmans.html', self.context)
+        else:
+            return products_page(request)       # !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    def __product_search(self):
+        self.__create_product_lookup()
+        priorities = self.__get_product_priorities()
+        self.context['category'] = False
+        self.context['min_price'] = self.request.POST.get('min_price')
+        self.context['max_price'] = self.request.POST.get('max_price')
+        self.context = self._get_page_products(self.request, priorities, self.context)
+        if not self.request.user.is_anonymous:
+            self.context['select_id_list'] = self._get_select_products_id_list(self.request.user)
+            self.context['like_id_list'] = self._get_like_products_id_list(self.request.user)
+        self.context['categories'] = categories = Category.objects.all()
+        self.context['parent_categories_id'] = self._get_parent_categories_id(categories)
+
+    def __salesman_search(self):
+        self.__create_salesman_lookup()
+        priorities = self.__get_salesman_priorities()
+        self.context = self._get_page_products(self.request, priorities, self.context)
+
+    def __create_queries(self):
+        self.query = self.request.POST.get('search')
+        self.context['search_query'] = self.query
+        self.sub_query_1 = self.query.lower()
+        self.sub_query_2 = self.query.upper()
+        if len(self.query) > 3:
+            self.sub_query_2 = self.query[1:]
+
+    def __create_product_lookup(self):
+        lookup1 = Q(name=self.query)
+        lookup2 = (Q(name__icontains=self.query) |
+                   Q(name__icontains=self.sub_query_1) |
+                   Q(name__icontains=self.sub_query_2))
+        lookup3 = (Q(description__icontains=self.query) |
+                   Q(description__icontains=self.sub_query_1) |
+                   Q(description__icontains=self.sub_query_2))
+        query_categories_1 = Category.objects.filter(lookup2)
+        lookup4 = Q(category__in=query_categories_1)
+        query_categories_2 = Category.objects.filter(lookup3)
+        lookup5 = Q(category__in=query_categories_2)
+        self.lookup_list = [lookup1, lookup2, lookup3, lookup4, lookup5]
+
+    def __create_salesman_lookup(self):
+        user_lookup = (Q(first_name__icontains=self.query) |
+                       Q(first_name__icontains=self.sub_query_1) |
+                       Q(first_name__icontains=self.sub_query_2))
+        users = CustomUser.objects.filter(user_lookup)
+        lookup1 = Q(user__in=users)
+        lookup2 = (Q(description__icontains=self.query) |
+                   Q(description__icontains=self.sub_query_1) |
+                   Q(description__icontains=self.sub_query_2))
+        self.lookup_list = [lookup1, lookup2]
+
+    def __get_product_priorities(self):
+        priorities = []
+        for lookup in self.lookup_list:
+            priorities.append(Product.objects.filter(lookup & self.limitation).order_by('-add_date'))
+        return priorities
+
+    def __get_salesman_priorities(self):
+        priorities = []
+        for lookup in self.lookup_list:
+            priorities.append(Salesman.objects.filter(lookup & self.limitation).order_by('-add_date'))
+        return priorities
 
 
 def _get_page_products(request, priorities, context):

@@ -22,7 +22,7 @@ from info.views import Info, Contact
 from review.views import Review
 from cart.views import Cart, Select, Like
 from salesman.views import Profile
-from shop.views import Home
+from shop.views import Home, Search
 
 urlpatterns = [
     # admin
@@ -50,9 +50,9 @@ urlpatterns = [
     path('account/', Profile().account_page, name='account'),
     # shop
     path('', Home().start_page, name='home'),
+    path('search/', Search().search, name='search'),
 
 
-    path('search/', search, name='search'),
     path('products/', products_page, name='products'),
     path('product_info/', product_info, name='product_info'),
     path('salesmans/', salesmans_page, name='salesmans'),

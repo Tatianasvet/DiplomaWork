@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="Cart app">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="class Home">
       <change beforePath="$PROJECT_DIR$/handmade/handmade/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/views.py" afterDir="false" />
     </list>
@@ -378,7 +377,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732050826624</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="class Home">
+      <option name="closed" value="true" />
+      <created>1732099741537</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1732099741537</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -393,7 +400,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="About page" />
     <MESSAGE value="product page" />
     <MESSAGE value="footer area" />
     <MESSAGE value="Login/logout" />
@@ -418,6 +424,7 @@
     <MESSAGE value=" Info app" />
     <MESSAGE value=" Review app" />
     <MESSAGE value="Cart app" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cart app" />
+    <MESSAGE value="class Home" />
+    <option name="LAST_COMMIT_MESSAGE" value="class Home" />
   </component>
 </project>
