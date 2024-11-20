@@ -16,13 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from shop.views import *
 from registration.views import Signup, Login, Change
 from info.views import Info, Contact
+from products.views import ProductView
 from review.views import Review
 from cart.views import Cart, Select, Like
-from salesman.views import Profile
-from shop.views import Home, Search
+from salesman.views import Profile, SalesmanView
+from search.views import Search
+from shop.views import Home
 
 urlpatterns = [
     # admin
@@ -51,12 +52,10 @@ urlpatterns = [
     # shop
     path('', Home().start_page, name='home'),
     path('search/', Search().search, name='search'),
-
-
-    path('products/', products_page, name='products'),
-    path('product_info/', product_info, name='product_info'),
-    path('salesmans/', salesmans_page, name='salesmans'),
-    path('salesman_info/', salesman_info_page, name='salesman_info'),
-    path('product_add_form/', product_add_form, name='product_add_form'),
-    path('delite_consent/', delite_consent_page, name='delite_consent'),
+    path('product_info/', ProductView().product_info, name='product_info'),
+    path('salesman_info/', SalesmanView().salesman_info_page, name='salesman_info'),
+    path('salesmans/', SalesmanView().salesmans_page, name='salesmans'),
+    path('product_add_form/', SalesmanView().add_product, name='product_add_form'),
+    path('delite_consent/', SalesmanView().delite_consent_page, name='delite_consent'),
+    path('products/', ProductView().products_page, name='products'),
 ]

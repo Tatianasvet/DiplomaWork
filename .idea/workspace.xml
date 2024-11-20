@@ -4,8 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="class Home">
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="class Search">
+      <change afterPath="$PROJECT_DIR$/handmade/salesman/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/handmade/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/products/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/products/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/salesman/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/salesman/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/search/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/search/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/shop/forms.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -385,7 +392,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732099741537</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="class Search">
+      <option name="closed" value="true" />
+      <created>1732104510477</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1732104510477</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -400,7 +415,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="product page" />
     <MESSAGE value="footer area" />
     <MESSAGE value="Login/logout" />
     <MESSAGE value="product_page/salesman_page" />
@@ -425,6 +439,7 @@
     <MESSAGE value=" Review app" />
     <MESSAGE value="Cart app" />
     <MESSAGE value="class Home" />
-    <option name="LAST_COMMIT_MESSAGE" value="class Home" />
+    <MESSAGE value="class Search" />
+    <option name="LAST_COMMIT_MESSAGE" value="class Search" />
   </component>
 </project>
