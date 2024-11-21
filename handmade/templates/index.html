@@ -300,14 +300,14 @@
                                                 <div class="product-action">
                                                     {% if product.id in like_id_list %}
                                                         <div class="active">
-                                                            <a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}">
+                                                            <a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}&back_path=home&flip=true">
                                                                 {{ product.likes.count }}
                                                                 <i class="ti-heart"></i>
                                                                 <span>Нравится</span>
                                                             </a>
                                                         </div>
                                                     {% else %}
-                                                        <a href="{% url 'like' %}?product_id={{ product.id }}">
+                                                        <a href="{% url 'like' %}?product_id={{ product.id }}&back_path=home&flip=true">
                                                             {{ product.likes.count }}
                                                             <i class="ti-heart"></i>
                                                             <span>Нравится</span>
@@ -316,9 +316,9 @@
                                                 </div>
                                                 <div class="product-action-2">
                                                     {% if product.id in select_id_list %}
-                                                        <a href="{% url 'del_from_cart' %}?product_id={{ product.id }}">Убрать из избранного</a>
+                                                        <a href="{% url 'del_from_cart' %}?product_id={{ product.id }}&back_path=home&flip=true">Убрать из избранного</a>
                                                     {% else %}
-                                                        <a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
+                                                        <a href="{% url 'add_to_cart' %}?product_id={{ product.id }}&back_path=home&flip=true">Добавить в избранное</a>
                                                     {% endif %}
                                                 </div>
 												{% else %}
@@ -377,14 +377,14 @@
 											<div class="product-action">
 												{% if product.id in like_id_list %}
 													<div class="active">
-														<a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}">
+														<a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}&back_path=home&flip=true">
 															{{ product.likes.count }}
 															<i class="ti-heart"></i>
 															<span>Нравится</span>
 														</a>
 													</div>
 												{% else %}
-													<a href="{% url 'like' %}?product_id={{ product.id }}">
+													<a href="{% url 'like' %}?product_id={{ product.id }}&back_path=home&flip=true">
 														{{ product.likes.count }}
 														<i class="ti-heart"></i>
 														<span>Нравится</span>
@@ -393,9 +393,9 @@
 											</div>
 											<div class="product-action-2">
 												{% if product.id in select_id_list %}
-													<a href="{% url 'del_from_cart' %}?product_id={{ product.id }}">Убрать из избранного</a>
+													<a href="{% url 'del_from_cart' %}?product_id={{ product.id }}&back_path=home&flip=true">Убрать из избранного</a>
 												{% else %}
-													<a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
+													<a href="{% url 'add_to_cart' %}?product_id={{ product.id }}&back_path=home&flip=true">Добавить в избранное</a>
 												{% endif %}
 											</div>
 										{% else %}
@@ -427,7 +427,7 @@
     </div>
 	<!--/ End View Now Area-->
 	
-	<!-- Start Shop Blog  -->
+	<!-- Start Newest Products Area -->
 	<section class="shop-blog section">
 		<div class="container">
 			<div class="row">
@@ -451,14 +451,14 @@
 									<div class="product-action">
 										{% if product.id in like_id_list %}
 											<div class="active">
-												<a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}">
+												<a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}&back_path=home&flip=true">
 													{{ product.likes.count }}
 													<i class="ti-heart"></i>
 													<span>Нравится</span>
 												</a>
 											</div>
 										{% else %}
-											<a href="{% url 'like' %}?product_id={{ product.id }}">
+											<a href="{% url 'like' %}?product_id={{ product.id }}&back_path=home&flip=true">
 												{{ product.likes.count }}
 												<i class="ti-heart"></i>
 												<span>Нравится</span>
@@ -467,9 +467,9 @@
 									</div>
 									<div class="product-action-2">
 										{% if product.id in select_id_list %}
-											<a href="{% url 'del_from_cart' %}?product_id={{ product.id }}">Убрать из избранного</a>
+											<a href="{% url 'del_from_cart' %}?product_id={{ product.id }}&back_path=home&flip=true">Убрать из избранного</a>
 										{% else %}
-											<a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
+											<a href="{% url 'add_to_cart' %}?product_id={{ product.id }}&back_path=home&flip=true">Добавить в избранное</a>
 										{% endif %}
 									</div>
 									{% else %}
@@ -498,7 +498,7 @@
 			</div>
 		</div>
 	</section>
-	<!-- End Shop Blog  -->
+	<!--/ End Newest Products Area  -->
 
 	{% endblock %}
 

@@ -31,6 +31,7 @@
     </div>
 {% endif %}
 <!-- /End Search Response -->
+
 <!-- Start Salesmans Area -->
 <div class="product-area section">
     <div class="container">
@@ -76,6 +77,7 @@
     </div>
 </div>
 <!-- End Salesmans Area -->
+
 <!-- Start Page Navigation -->
 <div class="breadcrumbs">
     <div class="container">
@@ -83,13 +85,9 @@
             <div class="col-12">
                 <div class="section-title">
                     <div class="page-navigation">
-                        <form {% if search_query %} method="post" {% endif %}>
+                        <form method="get">
                             {% csrf_token %}
-                                <input name="category_id" value="{{ category.id }}" hidden="hidden">
-                                <input name="search" value="{{ search_query }}" hidden="hidden">
-                                <input name="mode" value="salesman" hidden="hidden">
-                                <input name="min_price" value="{{ min_price }}" hidden="hidden">
-                                <input name="max_price" value="{{ max_price }}" hidden="hidden">
+                                <input name="flip" value="true" hidden="hidden">
                                 {% if has_previous %}
                                     <button class="btn" name="page" value="{{ previous_page_number }}">
                                         <i class="fa fa-angle-left"></i>—

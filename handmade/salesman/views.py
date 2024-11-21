@@ -1,8 +1,16 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from shop.views import Context, AbstractPaginator, AbstractCategories, AbstractCart
+from shop.views import AbstractPaginator, AbstractCategories, AbstractCart
 from shop.models import Salesman, Product, Category
 from .forms import AddProductForm
+
+
+class Context:
+    context = {}
+    request = None
+
+    def _set_context(self):
+        pass
 
 
 class Profile(Context):
@@ -16,30 +24,6 @@ class Profile(Context):
             return render(request, 'account.html', self.context)
         else:
             return redirect('cart')
-
-
-class SalesmanView(Context, AbstractCart, AbstractPaginator, AbstractCategories):
-    def salesman_info_page(self, request):
-        self.request = request
-        salesman_id = self.request.GET.get('salesman_id')
-        salesman = Salesman.objects.get(id=salesman_id)
-        limitation = Q(moderate__exact=True)
-        query = Q(salesman__exact=salesman)
-        products = Product.objects.filter(query & limitation).order_by('-add_date')
-        self.context['salesman'] = salesman
-        self.context['products'] = products
-        if not self.request.user.is_anonymous:
-            self.context['select_id_list'] = self._get_select_products_id_list(self.request.user)
-            self.context['like_id_list'] = self._get_like_products_id_list(self.request.user)
-        return render(self.request, 'salesman_info.html', self.context)
-
-    def salesmans_page(self, request):
-        self.request = request
-        limitation = Q(moderate__exact=True)
-        priorities = [Salesman.objects.filter(limitation), ]
-        self.context['mode'] = 'salesman'
-        self.context = self._get_page_products(self.request, priorities, self.context)
-        return render(self.request, 'salesmans.html', self.context)
 
     def add_product(self, request):
         self.request = request
@@ -94,3 +78,51 @@ class SalesmanView(Context, AbstractCart, AbstractPaginator, AbstractCategories)
                     product.delete()
                 return redirect('account')
         return render(self.request, 'consent_page.html', self.context)
+
+
+class SalesmanView(Context, AbstractCart, AbstractPaginator, AbstractCategories):
+    """
+    Class for views about salesman
+
+    Context fields:
+        1. Content:
+            -->'salesman'
+            'products' <--
+            ... paginator fields
+        2. Auxiliary data
+            'mode' = 'salesman'
+            'select_id_list' <--
+            'like_id_list' <--
+            'back_patch' = 'salesman_info'
+            ... paginator fields
+    """
+    def _set_context(self):
+        if not self.request.user.is_anonymous:
+            self.context['select_id_list'] = self._get_select_products_id_list(self.request.user)
+            self.context['like_id_list'] = self._get_like_products_id_list(self.request.user)
+
+    def salesman_info_page(self, request):
+        self.request = request
+        self._set_context()
+        self.context['back_path'] = 'salesman_info'
+        salesman_id = self.request.GET.get('salesman_id')
+        salesman = Salesman.objects.get(id=salesman_id)
+        limitation = Q(moderate__exact=True)
+        query = Q(salesman__exact=salesman)
+        products = Product.objects.filter(query & limitation).order_by('-add_date')
+        self.context['salesman'] = salesman
+        self.context['products'] = products
+        return render(self.request, 'salesman_info.html', self.context)
+
+    def salesmans_page(self, request):
+        self.request = request
+        self._set_context()
+        self.context['back_path'] = 'salesmans'
+        flip = self.request.GET.get('flip')
+        if flip == 'true':
+            self.context = self._get_page_products(self.request, [], self.context, flip=True)
+        else:
+            limitation = Q(moderate__exact=True)
+            priorities = [Salesman.objects.filter(limitation), ]
+            self.context = self._get_page_products(self.request, priorities, self.context)
+        return render(self.request, 'salesmans.html', self.context)

@@ -4,16 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="class Search">
-      <change afterPath="$PROJECT_DIR$/handmade/salesman/forms.py" afterDir="false" />
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="separate apps">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/cart/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/cart/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/handmade/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/handmade/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/products/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/products/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/salesman/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/salesman/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/search/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/search/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/shop/forms.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/handmade/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/account.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/salesman/account.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/consent_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/salesman/consent_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/product_add_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/salesman/product_add_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/product_info.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/products/product_info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/products/products.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/salesman_info.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/salesman/salesman_info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/templates/salesmans.html" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/templates/salesman/salesmans.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,10 +57,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\salesman" />
+      <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\products" />
       <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\cart" />
       <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\review" />
       <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\info" />
-      <recent name="C:\Users\svett\PycharmProjects\DiplomaWork\handmade\templates\registration" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -400,7 +408,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732104510477</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="separate apps">
+      <option name="closed" value="true" />
+      <created>1732124929482</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1732124929482</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -415,7 +431,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="footer area" />
     <MESSAGE value="Login/logout" />
     <MESSAGE value="product_page/salesman_page" />
     <MESSAGE value="categories" />
@@ -440,6 +455,7 @@
     <MESSAGE value="Cart app" />
     <MESSAGE value="class Home" />
     <MESSAGE value="class Search" />
-    <option name="LAST_COMMIT_MESSAGE" value="class Search" />
+    <MESSAGE value="separate apps" />
+    <option name="LAST_COMMIT_MESSAGE" value="separate apps" />
   </component>
 </project>

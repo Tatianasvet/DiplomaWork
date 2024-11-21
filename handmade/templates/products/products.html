@@ -99,6 +99,7 @@
     </div>
 {% endif %}
 <!-- End Breadcrumbs -->
+
 <!-- Start Product Area -->
 <div class="product-area section">
     <div class="container">
@@ -114,18 +115,35 @@
                 <div class="product-info">
                     <div class="col-lg-12 col-md-12 col-12">
                         <div class="checkout-form">
-                            <form method="post">
-                                {% csrf_token %}
-                                <label><i class="ti-filter"></i></label>
-                                <input name="category_id" value="{{ category.id }}" hidden="hidden">
-                                <input name="search" value="{{ search_query }}" hidden="hidden">
-                                <input name="mode" value="product" hidden="hidden">
-                                <input name="min_price" value={{ min_price }} hidden="hidden">
-                                <input name="max_price" value={{ max_price }} hidden="hidden">
-                                <input type="number" name="change_min_price" min="0" {% if min_price %} placeholder="{{ min_price }}" {% else %} placeholder="минимальная цена" {% endif %}>
-                                <input type="number" name="change_max_price" min="0" {% if max_price %} placeholder="{{ max_price }}" {% else %} placeholder="максимальная цена" {% endif %}>
-                                <button class="btn" type="submit">Применить</button>
-                            </form>
+                            <div class="row">
+                                <form id="filter" method="get" action="{% url back_path %}">
+                                    {% csrf_token %}
+                                    <label><i class="ti-filter"></i></label>
+                                    <input name="category_id" value="{{ category.id }}" hidden="hidden">
+                                    <input name="search" value="{{ search_query }}" hidden="hidden">
+                                    <input name="mode" value="product" hidden="hidden">
+                                    {% if min_price %}
+                                        <input type="number" name="change_min_price" min="0" placeholder="{{ min_price }}">
+                                    {% else %}
+                                        <input type="number" name="change_min_price" min="0" placeholder="минимальная цена">
+                                    {% endif %}
+                                    {% if max_price %}
+                                        <input type="number" name="change_max_price" min="0" placeholder="{{ max_price }}">
+                                    {% else %}
+                                        <input type="number" name="change_max_price" min="0" placeholder="максимальная цена">
+                                    {% endif %}
+                                    <button class="btn" type="submit">Применить</button>
+                                </form>
+                                <div class="page-navigation">
+                                    <form>
+                                        {% csrf_token %}
+                                        <input name="reset" value="true" hidden="hidden">
+                                        <button class="btn" type="submit">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -142,14 +160,14 @@
                                                 <div class="product-action">
                                                     {% if product.id in like_id_list %}
                                                         <div class="active">
-                                                            <a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}">
+                                                            <a class="active" href="{% url 'dislike' %}?product_id={{ product.id }}&back_path={{ back_path }}&flip=true">
                                                                 {{ product.likes.count }}
                                                                 <i class="ti-heart"></i>
                                                                 <span>Нравится</span>
                                                             </a>
                                                         </div>
                                                     {% else %}
-                                                        <a href="{% url 'like' %}?product_id={{ product.id }}">
+                                                        <a href="{% url 'like' %}?product_id={{ product.id }}&back_path={{ back_path }}&flip=true">
                                                             {{ product.likes.count }}
                                                             <i class="ti-heart"></i>
                                                             <span>Нравится</span>
@@ -158,9 +176,9 @@
                                                 </div>
                                                 <div class="product-action-2">
                                                     {% if product.id in select_id_list %}
-                                                        <a href="{% url 'del_from_cart' %}?product_id={{ product.id }}">Убрать из избранного</a>
+                                                        <a href="{% url 'del_from_cart' %}?product_id={{ product.id }}&back_path={{ back_path }}&flip=true">Убрать из избранного</a>
                                                     {% else %}
-                                                        <a href="{% url 'add_to_cart' %}?product_id={{ product.id }}">Добавить в избранное</a>
+                                                        <a href="{% url 'add_to_cart' %}?product_id={{ product.id }}&back_path={{ back_path }}&flip=true">Добавить в избранное</a>
                                                     {% endif %}
                                                 </div>
                                             {% else %}
@@ -193,6 +211,7 @@
     </div>
 </div>
 <!-- End Product Area -->
+
 <!-- Start Page Navigation -->
 <div class="breadcrumbs">
     <div class="container">
@@ -200,13 +219,9 @@
             <div class="col-12">
                 <div class="section-title">
                     <div class="page-navigation">
-                        <form method="post">
+                        <form method="get">
                             {% csrf_token %}
-                                <input name="category_id" value="{{ category.id }}" hidden="hidden">
-                                <input name="search" value="{{ search_query }}" hidden="hidden">
-                                <input name="mode" value="product" hidden="hidden">
-                                <input name="min_price" value={{ min_price }} hidden="hidden">
-                                <input name="max_price" value={{ max_price }} hidden="hidden">
+                                <input name="flip" value="true" hidden="hidden">
                                 {% if has_previous %}
                                     <button class="btn" name="page" value="{{ previous_page_number }}">
                                         <i class="fa fa-angle-left"></i>—

@@ -25,15 +25,28 @@ from salesman.views import Profile, SalesmanView
 from search.views import Search
 from shop.views import Home
 
+product_view = ProductView()
+salesman_view = SalesmanView()
+search = Search()
+
 urlpatterns = [
     # admin
     path('admin/', admin.site.urls),
+    # cart
+    path('cart/', Cart().cart_page, name='cart'),
+    path('add_to_cart/', Select().add_to_cart, name='add_to_cart'),
+    path('del_from_cart/', Select().del_from_cart, name='del_from_cart'),
+    path('like/', Like().like, name='like'),
+    path('dislike', Like().dislike, name='dislike'),
     # info
     path('about/', Info().about_page, name='about'),
     path('faq/', Info().faq_page, name='faq'),
     path('conditions/', Info().conditions_page, name='conditions'),
     path('payment/', Info().payment_page, name='payment'),
     path('contact/', Contact().contact_page, name='contact'),
+    # products
+    path('product_info/', product_view.product_info, name='product_info'),
+    path('products/', product_view.products_page, name='products'),
     # registration
     path('signup/', Signup().signup_page, name='signup'),
     path('login/', Login().log_in_page, name='login'),
@@ -41,21 +54,14 @@ urlpatterns = [
     path('change_personal_info/', Change().change_salesman_info, name='change_personal_info'),
     # review
     path('reviews/', Review().reviews_page, name='reviews'),
-    # cart
-    path('cart/', Cart().cart_page, name='cart'),
-    path('add_to_cart/', Select().add_to_cart, name='add_to_cart'),
-    path('del_from_cart/', Select().del_from_cart, name='del_from_cart'),
-    path('like/', Like().like, name='like'),
-    path('dislike', Like().dislike, name='dislike'),
     # salesman
     path('account/', Profile().account_page, name='account'),
+    path('salesman_info/', salesman_view.salesman_info_page, name='salesman_info'),
+    path('salesmans/', salesman_view.salesmans_page, name='salesmans'),
+    path('product_add_form/', Profile().add_product, name='product_add_form'),
+    path('delite_consent/', Profile().delite_consent_page, name='delite_consent'),
+    # search
+    path('search/', search.search, name='search'),
     # shop
     path('', Home().start_page, name='home'),
-    path('search/', Search().search, name='search'),
-    path('product_info/', ProductView().product_info, name='product_info'),
-    path('salesman_info/', SalesmanView().salesman_info_page, name='salesman_info'),
-    path('salesmans/', SalesmanView().salesmans_page, name='salesmans'),
-    path('product_add_form/', SalesmanView().add_product, name='product_add_form'),
-    path('delite_consent/', SalesmanView().delite_consent_page, name='delite_consent'),
-    path('products/', ProductView().products_page, name='products'),
 ]
