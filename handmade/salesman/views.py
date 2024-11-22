@@ -13,7 +13,7 @@ class Context:
         pass
 
 
-class Profile(Context):
+class Profile(Context, AbstractCategories):
     def account_page(self, request):
         self.request = request
         if request.user.first_name:

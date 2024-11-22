@@ -13,24 +13,6 @@ class Context:
 
 
 class ProductView(Context, AbstractCart, AbstractCategories, AbstractPaginator):
-    """
-    Class for views about products
-
-    Context fields:
-        1. Content:
-            'salesman' <--
-            'product' <--
-            ... paginator fields
-        2. Auxiliary data
-            'select_id_list' <--
-            'like_id_list' <--
-            'category' <--
-            'way' <--
-            'categories' <--
-            'parent_categories_id' <--
-            'back_patch' = 'products'
-            ... paginator fields
-    """
 
     def _set_context(self):
         if not self.request.user.is_anonymous:
