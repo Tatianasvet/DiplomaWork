@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Salesman
+from .models import Category, Product
 
 
 @admin.register(Category)
@@ -10,17 +10,6 @@ class CategoryAdmin(admin.ModelAdmin):
 
     def product_count(self, obj):
         return Product.objects.filter(category=obj).count()
-
-
-"""
-@admin.register(Salesman)
-class SalesmanAdmin(admin.ModelAdmin):
-    search_fields = ["user__first_name", "user__username"]
-    list_display = ["user__first_name", "moderate", "user__username", "user__email", "phone", "signup_date"]
-    sortable_by = ["user__first_name", "signup_date"]
-    list_filter = ["moderate"]
-    fields = ["user", "phone", "photo", "description", "moderate"]
-"""
 
 
 @admin.register(Product)

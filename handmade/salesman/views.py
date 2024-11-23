@@ -81,21 +81,7 @@ class Profile(Context, AbstractCategories):
 
 
 class SalesmanView(Context, AbstractCart, AbstractPaginator, AbstractCategories):
-    """
-    Class for views about salesman
 
-    Context fields:
-        1. Content:
-            -->'salesman'
-            'products' <--
-            ... paginator fields
-        2. Auxiliary data
-            'mode' = 'salesman'
-            'select_id_list' <--
-            'like_id_list' <--
-            'back_patch' = 'salesman_info'
-            ... paginator fields
-    """
     def _set_context(self):
         if not self.request.user.is_anonymous:
             self.context['select_id_list'] = self._get_select_products_id_list(self.request.user)

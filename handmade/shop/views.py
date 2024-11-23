@@ -15,20 +15,6 @@ class Context:
 
 
 class AbstractPaginator:
-    """
-    Context fields:
-        1. Content:
-            'page' <--
-        2. Auxiliary data
-            'current_page_number' <--
-            'has_previous' <--
-            'previous_page_number' <--
-            'has_next' <--
-            'next_page_number' <--
-            'page_range' <--
-            -->'min_price'
-            -->'max_price'
-    """
     paginator = None
     page = None
     page_number = None
@@ -65,7 +51,6 @@ class AbstractPaginator:
             if self.page_number is None or not flip:
                 self.page_number = 1
 
-
     def __delete_duplicates(self, priorities):
         id_list = []
         result = []
@@ -75,6 +60,7 @@ class AbstractPaginator:
                     result.append(iter_object)
                     id_list.append(iter_object.id)
         return result
+
 
 class AbstractCart:
     def _get_select_products_id_list(self, user):
