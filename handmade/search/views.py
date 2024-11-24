@@ -13,25 +13,7 @@ class Context:
 
 
 class Search(Context, AbstractCart, AbstractCategories, AbstractPaginator):
-    """
-    Class for search products and salesmans
 
-    Context fields:
-        1. Content:
-            ... paginator fields
-        2. Auxiliary data
-            -->'mode' -- 'product' / 'salesman'
-            'back_patch' = 'search'
-            -->'search_query'
-            'category' = False
-            -->'min_price'
-            -->'max_price'
-            'select_id_list' <--
-            'like_id_list' <--
-            'categories' = all categories
-            'parent_categories_id' <== all parent categories id
-            ... paginator fields
-    """
     limitation = Q(moderate__exact=True)
     lookup_list = []
     query, sub_query_1, sub_query_2 = None, None, None
