@@ -145,5 +145,5 @@ class Search(Context, AbstractCart, AbstractCategories, AbstractPaginator):
     def __get_salesman_priorities(self):
         priorities = []
         for lookup in self.lookup_list:
-            priorities.append(Salesman.objects.filter(lookup & self.limitation).order_by('-add_date'))
+            priorities.append(Salesman.objects.filter(lookup & self.limitation).order_by('-signup_date'))
         return priorities

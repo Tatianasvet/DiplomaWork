@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="new">
+    <list default="true" id="4c45999b-23a9-406a-a664-503003f08535" name="Changes" comment="to protect">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/products/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/products/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handmade/shop/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/shop/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handmade/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/handmade/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -427,7 +426,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732384941648</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="to protect">
+      <option name="closed" value="true" />
+      <created>1732439748717</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1732439748718</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -442,7 +449,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="categories redy" />
     <MESSAGE value="broken salesman login" />
     <MESSAGE value="salesman sign up" />
     <MESSAGE value="salesman account" />
@@ -467,6 +473,7 @@
     <MESSAGE value="filter 3" />
     <MESSAGE value="new products" />
     <MESSAGE value="new" />
-    <option name="LAST_COMMIT_MESSAGE" value="new" />
+    <MESSAGE value="to protect" />
+    <option name="LAST_COMMIT_MESSAGE" value="to protect" />
   </component>
 </project>
