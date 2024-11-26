@@ -93,15 +93,17 @@ class Search(Context, AbstractCart, AbstractCategories, AbstractPaginator):
     def __product_search(self):
         self.__create_product_lookup()
         priorities = self.__get_product_priorities()
+        products = self.__delete_duplicates(priorities)
         self.context['category'] = False
-        self.context = self._get_page_products(self.request, priorities, self.context)
+        self.context = self._get_page_products(self.request, products, self.context)
         self.context['categories'] = categories = Category.objects.all()
         self.context['parent_categories_id'] = self._get_parent_categories_id(categories)
 
     def __salesman_search(self):
         self.__create_salesman_lookup()
         priorities = self.__get_salesman_priorities()
-        self.context = self._get_page_products(self.request, priorities, self.context)
+        salesmans = self.__delete_duplicates(priorities)
+        self.context = self._get_page_products(self.request, salesmans, self.context)
 
     def __create_queries(self):
         self.query = self.request.POST.get('search')
@@ -147,3 +149,13 @@ class Search(Context, AbstractCart, AbstractCategories, AbstractPaginator):
         for lookup in self.lookup_list:
             priorities.append(Salesman.objects.filter(lookup & self.limitation).order_by('-signup_date'))
         return priorities
+
+    def __delete_duplicates(self, priorities):
+        id_list = []
+        result = []
+        for objects_list in priorities:
+            for i in objects_list:
+                if i.id not in id_list:
+                    id_list.append(i.id)
+                    result.append(i)
+        return result

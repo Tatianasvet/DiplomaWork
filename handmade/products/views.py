@@ -68,10 +68,11 @@ class ProductView(Context, AbstractCart, AbstractCategories, AbstractPaginator):
                 self.context['categories'] = categories = self._sub_categories_list(category, [])
                 self.context['parent_categories_id'] = self._get_parent_categories_id(categories)
                 priorities = self._get_products_by_categories_list(categories, limitation)
+                products = sum(priorities, [])
             else:
                 self.context['category'] = False
-                priorities = [Product.objects.filter(limitation).order_by('-add_date'), ]
+                products = Product.objects.filter(limitation).order_by('-add_date')
                 self.context['categories'] = categories = Category.objects.all()
                 self.context['parent_categories_id'] = self._get_parent_categories_id(categories)
-            self.context = self._get_page_products(self.request, priorities, self.context)
+            self.context = self._get_page_products(self.request, products, self.context)
         return render(self.request, 'products.html', self.context)

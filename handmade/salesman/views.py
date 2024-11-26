@@ -109,6 +109,6 @@ class SalesmanView(Context, AbstractCart, AbstractPaginator, AbstractCategories)
             self.context = self._get_page_products(self.request, [], self.context, flip=True)
         else:
             limitation = Q(moderate__exact=True)
-            priorities = [Salesman.objects.filter(limitation), ]
-            self.context = self._get_page_products(self.request, priorities, self.context)
+            products = Salesman.objects.filter(limitation)
+            self.context = self._get_page_products(self.request, products, self.context)
         return render(self.request, 'salesmans.html', self.context)

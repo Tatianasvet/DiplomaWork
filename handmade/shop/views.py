@@ -19,11 +19,10 @@ class AbstractPaginator:
     page = None
     page_number = None
 
-    def _get_page_products(self, request, priorities, context, flip=False):
+    def _get_page_products(self, request, objects_list, context, flip=False):
         self.__set_page_number(request)
         if not flip:
-            objects = self.__delete_duplicates(priorities)
-            self.paginator = Paginator(objects, PRODUCT_PER_PAGE_COUNT)
+            self.paginator = Paginator(objects_list, PRODUCT_PER_PAGE_COUNT)
         self.page = self.paginator.page(self.page_number)
         context = self.__context_manager(context)
         return context
@@ -50,16 +49,6 @@ class AbstractPaginator:
             flip = request.GET.get('flip') == 'true'
             if self.page_number is None or not flip:
                 self.page_number = 1
-
-    def __delete_duplicates(self, priorities):
-        id_list = []
-        result = []
-        for original_set in priorities:
-            for iter_object in original_set:
-                if iter_object.id not in id_list:
-                    result.append(iter_object)
-                    id_list.append(iter_object.id)
-        return result
 
 
 class AbstractCart:
