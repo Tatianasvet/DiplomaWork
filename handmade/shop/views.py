@@ -80,7 +80,7 @@ class AbstractCategories:
                     break
         return parent_categories_id
 
-    def _sub_categories_list(self, parent_category, category_list) -> list:
+    def _sub_categories_list(self, parent_category, category_list):
         category_list.append(parent_category)
         for sub_category in Category.objects.all():
             if sub_category.parent_category_id == parent_category.id:
@@ -110,14 +110,12 @@ class Home(Context, AbstractCategories, AbstractCart, AbstractPaginator):
     NEWEST_PRODUCTS_COUNT = 8
 
     limitation = Q(moderate__exact=True)
-    categories = None
 
     def start_page(self, request):
         self.request = request
-        self.categories = self._all_categories()
         self.context['user'] = self.request.user
-        self.context['categories'] = self.categories
-        self.context['parent_categories_id'] = self._get_parent_categories_id(self.categories)
+        self.context['categories'] = categories = self._all_categories()
+        self.context['parent_categories_id'] = self._get_parent_categories_id(categories)
         self.context['popular_products'] = self.__most_popular_products()
         self.context['now_view_products'] = self.__now_view_products()
         self.context['newest_products'] = self.__newest_products()
