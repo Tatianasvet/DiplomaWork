@@ -37,29 +37,26 @@ class Search(Context, AbstractCart, AbstractCategories, AbstractPaginator):
             if 'max_price' in self.context.keys():
                 self.context.pop('max_price')
 
-    def _get_search_limitations(self):
-        limitation = Q(moderate__exact=True)
+    def _set_search_limitations(self):
         if 'min_price' in self.context.keys():
             min_price = self.context['min_price']
             if min_price and min_price != 'None' and min_price != '':
-                limitation = limitation & Q(price__gte=int(min_price))
+                self.limitation = self.limitation & Q(price__gte=int(min_price))
         if 'max_price' in self.context.keys():
             max_price = self.context['max_price']
             if max_price and max_price != 'None' and max_price != '':
-                limitation = limitation & Q(price__lte=int(max_price))
-        return limitation
+                self.limitation = self.limitation & Q(price__lte=int(max_price))
 
     def search(self, request):
         self.request = request
         self._set_context()
-        self.limitation = self._get_search_limitations()
+        self._set_search_limitations()
         if self.request.method == 'POST':
             search_mode = self.request.POST.get('mode')
             self.context['mode'] = search_mode
             self.__create_queries()
             if self.query == '':
                 return redirect('products')
-            self.context['back_patch'] = 'search'
             self.__variable_search()
             return self.__render_result()
         else:
@@ -94,7 +91,6 @@ class Search(Context, AbstractCart, AbstractCategories, AbstractPaginator):
         self.__create_product_lookup()
         priorities = self.__get_product_priorities()
         products = self.__delete_duplicates(priorities)
-        self.context['category'] = False
         self.context = self._get_page_products(self.request, products, self.context)
         self.context['categories'] = categories = Category.objects.all()
         self.context['parent_categories_id'] = self._get_parent_categories_id(categories)
