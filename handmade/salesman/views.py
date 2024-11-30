@@ -57,11 +57,9 @@ class Profile(Context, AbstractCategories):
 
     def delite_consent_page(self, request):
         self.request = request
-        object_type = self.request.GET.get('object_type')
-        target_id = self.request.GET.get('target_id')
         self.context['consent'] = False
-        self.context['object_type'] = object_type
-        self.context['target_id'] = request.GET.get('target_id')
+        self.context['object_type'] = object_type = self.request.GET.get('object_type')
+        self.context['target_id'] = target_id = self.request.GET.get('target_id')
         if object_type == 'salesman':
             salesman = Salesman.objects.get(id=target_id)
             self.context['question'] = f'Вы уверены, что хотите удалить все данные о мастере {salesman.user.first_name}?'
@@ -94,21 +92,20 @@ class SalesmanView(Context, AbstractCart, AbstractPaginator, AbstractCategories)
         salesman_id = self.request.GET.get('salesman_id')
         salesman = Salesman.objects.get(id=salesman_id)
         limitation = Q(moderate__exact=True)
-        query = Q(salesman__exact=salesman)
-        products = Product.objects.filter(query & limitation).order_by('-add_date')
+        lookup = Q(salesman__exact=salesman)
+        products = Product.objects.filter(lookup & limitation).order_by('-add_date')
         self.context['salesman'] = salesman
         self.context['products'] = products
         return render(self.request, 'salesman_info.html', self.context)
 
     def salesmans_page(self, request):
         self.request = request
-        self._set_context()
         self.context['back_path'] = 'salesmans'
         flip = self.request.GET.get('flip')
         if flip == 'true':
             self.context = self._get_page_products(self.request, [], self.context, flip=True)
         else:
             limitation = Q(moderate__exact=True)
-            products = Salesman.objects.filter(limitation)
-            self.context = self._get_page_products(self.request, products, self.context)
+            salesmans = Salesman.objects.filter(limitation)
+            self.context = self._get_page_products(self.request, salesmans, self.context)
         return render(self.request, 'salesmans.html', self.context)
