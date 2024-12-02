@@ -16,8 +16,7 @@ class Cart:
         if request.user.is_anonymous:
             return redirect('login')
         products = Product.objects.filter(select=request.user)
-        context = {'products': products}
-        return render(request, 'cart.html', context)
+        return render(request, 'cart.html', {'products': products})
 
 
 class Select(Update):
