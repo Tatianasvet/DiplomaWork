@@ -33,19 +33,19 @@ class ProductView(Context, AbstractCart, AbstractCategories, AbstractPaginator):
 
     def _get_search_limitations(self):
         limitation = Q(moderate__exact=True)
-        if 'min_price' in self.context.keys():
-            min_price = self.context['min_price']
-            if min_price and min_price != 'None' and min_price != '':
+        try:
+            if 'min_price' in self.context.keys():
+                min_price = self.context['min_price']
                 limitation = limitation & Q(price__gte=int(min_price))
-        if 'max_price' in self.context.keys():
-            max_price = self.context['max_price']
-            if max_price and max_price != 'None' and max_price != '':
+            if 'max_price' in self.context.keys():
+                max_price = self.context['max_price']
                 limitation = limitation & Q(price__lte=int(max_price))
+        except TypeError:
+            pass
         return limitation
 
     def product_info(self, request):
         self.request = request
-        self._set_context()
         product_id = request.GET.get('product_id')
         product = Product.objects.get(id=product_id)
         self.context['salesman'] = product.salesman
@@ -67,8 +67,7 @@ class ProductView(Context, AbstractCart, AbstractCategories, AbstractPaginator):
                 self.context['way'] = self._category_way(category_id)
                 self.context['categories'] = categories = self._sub_categories_list(category, [])
                 self.context['parent_categories_id'] = self._get_parent_categories_id(categories)
-                priorities = self._get_products_by_categories_list(categories, limitation)
-                products = sum(priorities, [])
+                products = self._get_products_by_categories_list(categories, limitation)
             else:
                 self.context['category'] = False
                 products = Product.objects.filter(limitation).order_by('-add_date')

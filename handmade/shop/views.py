@@ -99,8 +99,12 @@ class AbstractCategories:
     def _get_products_by_categories_list(self, categories_list, limitation):
         result = []
         for category in categories_list:
-            result.append(Product.objects.filter(Q(category__exact=category) & limitation).order_by('-add_date'))
+            category_set = Product.objects.filter(Q(category__exact=category) & limitation).order_by('-add_date')
+            for product in category_set:
+                result.append(product)
         return result
+
+
 
 
 class Home(Context, AbstractCategories, AbstractCart, AbstractPaginator):
